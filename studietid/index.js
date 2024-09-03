@@ -2,6 +2,10 @@ const db = require('better-sqlite3')('database.db', { verbose: console.log });
 
 function addUser(firstName, lastName, idRole, isAdmin, email)
 {
+    if(checkMail(email)) {
+        console.log("Invalid Email");
+        return 1;
+    }
 
     let sql = db.prepare(`INSERT INTO user (firstName, lastName, idRole, isAdmin, email)
          VALUES (?, ?, ?, ?, ?)`);
@@ -19,4 +23,23 @@ function addUser(firstName, lastName, idRole, isAdmin, email)
     return rows[0];
 };
 
-addUser("John", "Doe", 3, 0, "johndoe@gmail.com");
+function checkMail(email)
+{
+    let re = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+
+    if (!re.test(email)) {
+        console.log("Invalid Email")
+        return true;
+    }
+
+    let sql = db.prepare(`SELECT email FROM user WHERE email = ?`);
+    let rows = sql.all(email);
+
+    return rows.length > 0;
+}
+
+function deleteUser(email)
+{
+    let sql = db.prepare(`DELETE FROM user WHERE email = ?`);
+    sql.run(email);
+}
