@@ -35,7 +35,7 @@ function addActivity(userID, idSubject, idRoom)
     let sql = db.prepare(`INSERT INTO activity (idUser, startTime, idSubject, idRoom, idStatus, duration)
          VALUES (?, ?, ?, ?, 1, 0)`);
          
-    const info = sql.run(userID, sqlDate, idSubject, idRoom);
+    const info = sql.run(userID, date, idSubject, idRoom);
 
     sql = db.prepare(`SELECT * FROM activity WHERE id = ?`);
 
@@ -86,3 +86,13 @@ function checkMail(email)
 
     return rows.length > 0;
 }
+
+// Exports
+
+module.exports = {
+    addUser,
+    addActivity,
+    deleteUser,
+    getUser,
+    checkMail
+  };
