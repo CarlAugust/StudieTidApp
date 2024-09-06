@@ -46,6 +46,31 @@ function addActivity(userID, idSubject, idRoom)
     return rows[0];
 }
 
+function addRoom(name)
+{
+    let sql = db.prepare(`INSERT INTO room (name) VALUES (?)`);
+    const info = sql.run(name);
+
+    sql = db.prepare(`SELECT * FROM room WHERE id = ?`);
+
+    let rows = sql.all(info.lastInsertRowid);
+    console.log("Rowslength:" + rows.length);
+
+    return rows[0];
+}
+
+function addSubject(name)
+{
+    let sql = db.prepare(`INSERT INTO subject (name) VALUES (?)`);
+    const info = sql.run(name);
+
+    sql = db.prepare(`SELECT * FROM subject WHERE id = ?`);
+
+    let rows = sql.all(info.lastInsertRowid);
+    console.log("Rowslength:" + rows.length);
+
+    return rows[0];
+}
 
 // Here are all the delete related functions
 
@@ -62,6 +87,17 @@ function deleteUser(email)
     console.log("Termination successful");
 }
 
+function deleteSubject(name)
+{
+    let sql = db.prepare(`DELETE FROM subject WHERE name = ?`);
+    sql.run(name);
+}
+
+function deleteRoom(name)
+{
+    let sql = db.prepare(`DELETE FROM room WHERE name = ?`);
+    sql.run(name);
+}
 
 // Here are all the get related functions
 
@@ -84,6 +120,7 @@ function checkMail(email)
 {
     let re = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
+    // If the reg test is invalid, it returns true and invalidates the email
     if (!re.test(email)) {
         console.log("Invalid Email")
         return true;
@@ -100,7 +137,11 @@ function checkMail(email)
 module.exports = {
     addUser,
     addActivity,
+    addRoom,
+    addSubject,
     deleteUser,
+    deleteSubject,
+    deleteRoom,
     getUser,
     checkMail
   };
