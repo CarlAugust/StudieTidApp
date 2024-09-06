@@ -5,7 +5,8 @@ const db = require('better-sqlite3')('database.db', { verbose: console.log });
 
 function addUser(firstName, lastName, idRole, isAdmin, email)
 {
-    if(checkMail(email)) {
+    if(checkMail(email))
+    {
         console.log("Invalid Email");
         return 1;
     }
@@ -49,23 +50,30 @@ function addActivity(userID, idSubject, idRoom)
 // Here are all the delete related functions
 
 function deleteUser(email)
-{
-    let sql = db.prepare(`DELETE FROM user WHERE email = ?`);
-    sql.run(email);
+{   
+    let row = getUser(email);
+
+    let sql = db.prepare(`DELETE FROM activity WHERE idUser = ?`);
+    sql.run(row.userID);
+
+    sql = db.prepare(`DELETE FROM user WHERE id = ?`);
+    sql.run(row.userID);
+
+    console.log("Termination successful");
 }
 
 
 // Here are all the get related functions
 
-function getUser(id)
+function getUser(email)
 {
     let sql = db.prepare(
         `SELECT user.id as userID, user.firstName, user.lastName, role.id as roleID, role.name as role, user.email
         FROM user
         inner join role on user.idRole = role.id
-        WHERE user.id = ?`);
+        WHERE user.email = ?`);
 
-    let rows = sql.all(id);
+    let rows = sql.all(email);
 
     return rows[0];
 }
@@ -84,7 +92,7 @@ function checkMail(email)
     let sql = db.prepare(`SELECT email FROM user WHERE email = ?`);
     let rows = sql.all(email);
 
-    return rows.length > 0;
+    return rows.length > 0; // If the email is already in the database length would be greater than 0
 }
 
 // Exports
