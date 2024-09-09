@@ -1,3 +1,5 @@
+// Porpuse: This file contains all the functions that interact with the database
+
 const db = require('better-sqlite3')('database.db', { verbose: console.log });
 
 
@@ -114,6 +116,18 @@ function getUser(email)
     return rows[0];
 }
 
+function getUsers()
+{
+    let sql = db.prepare(
+        `SELECT user.id as userID, user.firstName, user.lastName, role.id as roleID, role.name as role, user.email
+        FROM user
+        inner join role on user.idRole = role.id`);
+
+    let rows = sql.all();
+
+    return rows;
+}
+
 // Here are all the verification related functions
 
 function checkMail(email)
@@ -143,5 +157,6 @@ module.exports = {
     deleteSubject,
     deleteRoom,
     getUser,
+    getUsers,
     checkMail
   };
