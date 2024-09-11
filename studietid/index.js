@@ -7,9 +7,8 @@ const session = require('express-session');
 const path = require('path').join(__dirname, 'public');
 
 // Body parser
-const bodyParser = require('body-parser');
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Modules
 const sql = require('./modules/sql.js');
