@@ -7,6 +7,13 @@
 </head>
 <body>
     <table width="80%" id="personList"></table>
+
+    <form id="register" method="POST" action="/addUser">
+        <input type="text" name="firstName" placeholder="First name" required>
+        <input type="text" name="lastName" placeholder="Last name" required>
+        <input type="text" name="email" placeholder="Email" required>
+        <button type="submit">Register</button>
+    </form>
     
     <script src="app.js"></script>
 </body>

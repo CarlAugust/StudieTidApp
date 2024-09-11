@@ -6,6 +6,11 @@ const app = express();
 const session = require('express-session');
 const path = require('path').join(__dirname, 'public');
 
+// Body parser
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // Modules
 const sql = require('./modules/sql.js');
 
@@ -23,4 +28,9 @@ app.listen(3000, () => {
 
 app.get('/getUsers', (req, res) => {
     res.send(sql.getUsers());
+});
+
+app.post('/addUser', (req, res) => {
+    console.log(req.body);
+    sql.addUser(req.body, 0, 3);
 });

@@ -5,9 +5,9 @@ const db = require('better-sqlite3')('database.db', { verbose: console.log });
 
 // Here are all the add related functions
 
-function addUser(firstName, lastName, idRole, isAdmin, email)
+function addUser(req, isAdmin, idRole)
 {
-    if(checkMail(email))
+    if(checkMail(req.email))
     {
         console.log("Invalid Email");
         return 1;
@@ -16,7 +16,7 @@ function addUser(firstName, lastName, idRole, isAdmin, email)
     let sql = db.prepare(`INSERT INTO user (firstName, lastName, idRole, isAdmin, email)
          VALUES (?, ?, ?, ?, ?)`);
          
-    const info = sql.run(firstName, lastName, idRole, isAdmin, email);
+    const info = sql.run(req.firstName, req.lastName, idRole, isAdmin, req.email);
 
     sql = db.prepare(
         `SELECT user.id as userID, role.id as roleID, role.name as role 
