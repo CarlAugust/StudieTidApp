@@ -60,11 +60,12 @@ async function addUser(event) {
             body: JSON.stringify(user)
         });
 
-        console.log(response);
-        fetchUsers();
+        let data = await response.json();
+        console.log(data);
     }
     catch (error)
     {
         console.log('Error:', error);
     }
+    fetchUsers();
 }

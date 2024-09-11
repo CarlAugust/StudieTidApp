@@ -30,6 +30,13 @@ app.get('/getUsers', (req, res) => {
 });
 
 app.post('/addUser', (req, res) => {
-    console.log(req.body);
-    sql.addUser(req.body, 0, 3);
+    let result = sql.addUser(req.body, 0, 3);
+
+    if (result === 0) {
+        return res.json({ message: 'User added' });
+    }
+    else
+    {
+        return res.json({ message: 'email already exists or is invalid' });
+    }
 });

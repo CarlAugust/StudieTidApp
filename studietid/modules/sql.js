@@ -17,17 +17,9 @@ function addUser(req, isAdmin, idRole)
          VALUES (?, ?, ?, ?, ?)`);
          
     const info = sql.run(req.firstName, req.lastName, idRole, isAdmin, req.email);
-
-    sql = db.prepare(
-        `SELECT user.id as userID, role.id as roleID, role.name as role 
-        FROM user
-        inner join role on user.idRole = role.id
-        WHERE user.id = ?`);
-
-    let rows = sql.all(info.lastInsertRowid);
-    console.log("Rowslength:" + rows.length);
-
-    return rows[0];
+    
+    return 0;
+    ;
 };
 
 function addActivity(userID, idSubject, idRoom)
