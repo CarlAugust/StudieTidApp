@@ -2,6 +2,9 @@ let persons = [];
 
 fetchUsers();
 
+const form = document.getElementById('register');
+form.addEventListener('submit', addUser);
+
 async function fetchUsers() {
     try 
     {
@@ -36,4 +39,32 @@ function displayPersons() {
 
         
     });
+}
+
+async function addUser(event) {
+    event.preventDefault();
+    
+    const user = {
+        firstName: form.firstName.value,
+        lastName: form.lastName.value,
+        email: form.email.value
+    };
+
+    try
+    {
+        let response = await fetch('/addUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        });
+
+        console.log(response);
+        fetchUsers();
+    }
+    catch (error)
+    {
+        console.log('Error:', error);
+    }
 }
