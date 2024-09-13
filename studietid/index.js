@@ -34,14 +34,14 @@ app.post('/addUser', (req, res) => {
 
     if (result === 0)
     {
-        return res.json({ message: 'User added' });
+        res.redirect('/index.html?error=none');
     }
     else if (result === 1)
     {
-        return res.json({ message: 'email is invalid' });
+        res.redirect('/index.html?error=invalidemail');
     }
     else
     {
-        return res.json({ message: 'email is already in the database' });
+        res.redirect('/index.html?error=emailinuse');
     }
 });

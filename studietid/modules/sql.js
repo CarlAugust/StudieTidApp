@@ -145,7 +145,6 @@ function checkMail(email)
     {
         return 2;
     }
-    return rows.length > 0; // If the email is already in the database length would be greater than 0
 }
 
 // Exports

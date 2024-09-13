@@ -2,6 +2,12 @@ let persons = [];
 
 fetchUsers();
 
+const params = new URLSearchParams(window.location.search);
+
+// Retrieve individual parameters
+const error = params.get('error'); 
+console.log(error)
+
 async function fetchUsers() {
     try 
     {
