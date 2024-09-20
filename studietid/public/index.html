@@ -6,14 +6,29 @@
     <title>App</title>
 </head>
 <body>
-    <table width="80%" id="personList"></table>
 
-    <form id="register" method="POST" action="/addUser">
-        <input type="text" name="firstName" placeholder="First name" required>
-        <input type="text" name="lastName" placeholder="Last name" required>
-        <input type="text" name="email" placeholder="Email" required>
-        <button type="submit">Register</button>
-    </form>
+    <div id="logAndReg">
+        <div id="login">
+            <table width="80%" id="personList"></table>
+
+            <form id="loginForm" method="POST" action="/addUser">
+                <input type="text" name="firstName" placeholder="First name" required>
+                <input type="text" name="lastName" placeholder="Last name" required>
+                <input type="text" name="email" placeholder="Email" required>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+        <div id="register">
+            <table width="80%" id="personList"></table>
+
+            <form id="registerForm" method="POST" action="/addUser">
+                <input type="text" name="firstName" placeholder="First name" required>
+                <input type="text" name="lastName" placeholder="Last name" required>
+                <input type="text" name="email" placeholder="Email" required>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    </div>
     
     <script src="app.js"></script>
 </body>

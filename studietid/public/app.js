@@ -1,7 +1,4 @@
-let persons = [];   
-
 fetchUsers();
-
 const params = new URLSearchParams(window.location.search);
 
 // Retrieve individual parameters
@@ -9,14 +6,15 @@ const error = params.get('error');
 console.log(error)
 
 async function fetchUsers() {
+    let persons = [];   
+
     try 
     {
         let response = await fetch('/getUsers');
         let data = await response.json();
         persons = data;
 
-        displayPersons();
-
+        displayPersons(persons);
     }
     catch (error)
     {
@@ -25,7 +23,7 @@ async function fetchUsers() {
 }
 
 // Funksjon for å vise listen med personer på nettsiden
-function displayPersons() {
+function displayPersons(persons) {
     const personList = document.getElementById('personList');
     personList.innerHTML = '<tr><th>First name</th><th>Last name</th><th>Email</th><th>Role</th></tr>'; // Tøm listen først
     

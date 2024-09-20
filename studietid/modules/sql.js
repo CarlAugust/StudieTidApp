@@ -4,11 +4,10 @@ const db = require('better-sqlite3')('database.db', { verbose: console.log });
 
 
 // Here are all the add related functions
+//------------------------------------------------//
 
-// Adds user, returns 0 if successful, 1 if email is invalid and 2 if the email is already in the database
 function addUser(req, isAdmin, idRole)
 {
-    // Checkmail returns 1 if invalid and 2 if the email is already in the database
     let re = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
     if (!re.test(req.email))
@@ -77,6 +76,7 @@ function addSubject(name)
 }
 
 // Here are all the delete related functions
+//------------------------------------------------//
 
 function deleteUser(email)
 {   
@@ -104,6 +104,7 @@ function deleteRoom(name)
 }
 
 // Here are all the get related functions
+//------------------------------------------------//
 
 function getUser(email)
 {
@@ -131,6 +132,7 @@ function getUsers()
 }
 
 // Exports
+//------------------------------------------------//
 
 module.exports = {
     addUser,
