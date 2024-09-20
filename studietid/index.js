@@ -30,13 +30,14 @@ app.get('/getUsers', (req, res) => {
 });
 
 app.post('/addUser', (req, res) => {
+
     let result = sql.addUser(req.body, 0, 3);
 
-    if (result === 0)
+    if (result === "success")
     {
         res.redirect('/index.html?error=none');
     }
-    else if (result === 1)
+    else if (result === "invalid")
     {
         res.redirect('/index.html?error=invalidemail');
     }

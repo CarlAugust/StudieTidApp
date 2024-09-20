@@ -8,21 +8,28 @@ const db = require('better-sqlite3')('database.db', { verbose: console.log });
 // Adds user, returns 0 if successful, 1 if email is invalid and 2 if the email is already in the database
 function addUser(req, isAdmin, idRole)
 {
-    const result = checkMail(req.email);
-    if(result === 1)
+    // Checkmail returns 1 if invalid and 2 if the email is already in the database
+    let re = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+
+    if (!re.test(req.email))
     {
-        return 1;
-    }
-    else if (result === 2)
-    {
-        return 2;
+        return "Invalid";
     }
 
-    let sql = db.prepare(`INSERT INTO user (firstName, lastName, idRole, isAdmin, email) VALUES (?, ?, ?, ?, ?)`);
+    let sql = db.prepare(`SELECT email FROM user WHERE email = ?`);
+
+    let rows = sql.all(req.email);
+    
+    if (rows.length > 0)
+    {
+        return "InUse";
+    }
+
+    sql = db.prepare(`INSERT INTO user (firstName, lastName, idRole, isAdmin, email) VALUES (?, ?, ?, ?, ?)`);
          
     sql.run(req.firstName, req.lastName, idRole, isAdmin, req.email);
 
-    return 0;
+    return "Success";
 };
 
 function addActivity(userID, idSubject, idRoom)
@@ -123,30 +130,6 @@ function getUsers()
     return rows;
 }
 
-// Here are all the verification related functions
-
-// A function that returns 1 if email is invalid and 2 if the email is already in the database
-function checkMail(email)
-{
-    let re = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-
-    // If the reg test is invalid, it returns 1
-    if (!re.test(email))
-    {
-        console.log("Invalid Email")
-        return 1;
-    }
-
-    let sql = db.prepare(`SELECT email FROM user WHERE email = ?`);
-    let rows = sql.all(email);
-    
-    // Returns 2 if the email is already in the database
-    if (rows.length > 0)
-    {
-        return 2;
-    }
-}
-
 // Exports
 
 module.exports = {
@@ -158,6 +141,5 @@ module.exports = {
     deleteSubject,
     deleteRoom,
     getUser,
-    getUsers,
-    checkMail
+    getUsers
   };
