@@ -31,7 +31,11 @@ app.get('/getUsers', (req, res) => {
 
 app.post('/addUser', (req, res) => {
 
-    let result = sql.addUser(req.body, 0, 3);
+    const email = req.body.email;
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+
+    let result = sql.addUser(firstName, lastName, email, 0, 3);
 
     if (result === "Success")
     {
