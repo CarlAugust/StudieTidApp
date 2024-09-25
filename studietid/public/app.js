@@ -1,4 +1,6 @@
 fetchUsers();
+fetchSubjects();
+fetchRooms();
 const params = new URLSearchParams(window.location.search);
 
 const error = params.get('error'); 
@@ -14,6 +16,40 @@ async function fetchUsers() {
         persons = data;
 
         displayPersons(persons);
+    }
+    catch (error)
+    {
+        console.log('Error:', error);
+    }
+}
+
+async function fetchSubjects() {
+    let subjects = [];   
+
+    try 
+    {
+        let response = await fetch('/getSubjects');
+        let data = await response.json();
+        subjects = data;
+
+        console.log(subjects);
+    }
+    catch (error)
+    {
+        console.log('Error:', error);
+    }
+}
+
+async function fetchRooms() {
+    let rooms = [];   
+
+    try 
+    {
+        let response = await fetch('/getRooms');
+        let data = await response.json();
+        rooms = data;
+
+        console.log(rooms);
     }
     catch (error)
     {

@@ -29,6 +29,14 @@ app.get('/getUsers', (req, res) => {
     res.send(sql.getUsers());
 });
 
+app.get('/getSubjects', (req, res) => {
+    res.send(sql.getSubjects());
+});
+
+app.get('/getRooms', (req, res) => {
+    res.send(sql.getRooms());
+});
+
 app.post('/addUser', (req, res) => {
 
     const email = req.body.email;
@@ -50,3 +58,11 @@ app.post('/addUser', (req, res) => {
         res.redirect('/index.html?error=emailinuse');
     }
 });
+
+app.post('/addActivity', (req, res) => {
+    const room = req.body.room;
+    const subject = req.body.subject;
+
+    // Temporary user id 1
+    sql.addActivity(1, subject, room);
+})

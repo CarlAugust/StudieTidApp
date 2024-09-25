@@ -131,6 +131,24 @@ function getUsers()
     return rows;
 }
 
+function getSubjects()
+{
+    let sql = db.prepare(`SELECT * FROM subject`);
+
+    let rows = sql.all();
+
+    return rows;
+}
+
+function getRooms()
+{
+    let sql = db.prepare(`SELECT * FROM room`);
+
+    let rows = sql.all();
+
+    return rows;
+}
+
 // Exports
 //------------------------------------------------//
 
@@ -143,5 +161,7 @@ module.exports = {
     deleteSubject,
     deleteRoom,
     getUser,
-    getUsers
+    getUsers,
+    getSubjects,
+    getRooms
   };

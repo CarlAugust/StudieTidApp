@@ -3,9 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>App</title>
 </head>
 <body>
+    <div class="header">
+        <div class="logo">LOGO</div>
+        <div class="user">
+            <img src="" alt="User Image">
+            <span>BRUKER</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="box history">
+            <h2>History</h2>
+            <p>Pending</p>
+        </div>
+        <div class="box register">
+            <h2>Registrer aktivitet</h2>
+            <form method="POST" action="/addActivity">
+                <select>
+                    <option value="" name="rom">Velg Rom</option>
+                </select>
+                <select>
+                    <option value="">Velg Fag</option>
+                </select>
+                <input type="text" placeholder="Mål">
+                <button type="submit">+</button>
+            </form>
+        </div>
+    </div>
 
     <div id="logAndReg">
         <div id="login">
@@ -15,17 +43,7 @@
                 <input type="text" name="firstName" placeholder="First name" required>
                 <input type="text" name="lastName" placeholder="Last name" required>
                 <input type="text" name="email" placeholder="Email" required>
-                <button type="submit">Register</button>
-            </form>
-        </div>
-        <div id="register">
-            <table width="80%" id="personList"></table>
-
-            <form id="registerForm" method="POST" action="/addUser">
-                <input type="text" name="firstName" placeholder="First name" required>
-                <input type="text" name="lastName" placeholder="Last name" required>
-                <input type="text" name="email" placeholder="Email" required>
-                <button type="submit">Register</button>
+                <button type="submit">Login</button>
             </form>
         </div>
     </div>
