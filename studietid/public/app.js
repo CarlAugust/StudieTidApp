@@ -32,7 +32,10 @@ async function fetchSubjects() {
         let data = await response.json();
         subjects = data;
 
-        console.log(subjects);
+        let selector = document.getElementById('subjectSelector')
+        subjects.forEach(subject => {
+            selector.innerHTML += `<option value="${subject.id}">${subject.name}</option>`;
+        });
     }
     catch (error)
     {
@@ -49,7 +52,10 @@ async function fetchRooms() {
         let data = await response.json();
         rooms = data;
 
-        console.log(rooms);
+        let selector = document.getElementById('roomSelector')
+        rooms.forEach(room => {
+            selector.innerHTML += `<option value="${room.id}">${room.name}</option>`;
+        });
     }
     catch (error)
     {

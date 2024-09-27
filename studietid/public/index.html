@@ -23,10 +23,10 @@
         <div class="box register">
             <h2>Registrer aktivitet</h2>
             <form method="POST" action="/addActivity">
-                <select>
-                    <option value="" name="rom">Velg Rom</option>
+                <select id="roomSelector" name="room">
+                    <option value="">Velg Rom</option>
                 </select>
-                <select>
+                <select id="subjectSelector" name="subject">
                     <option value="">Velg Fag</option>
                 </select>
                 <input type="text" placeholder="Mål">

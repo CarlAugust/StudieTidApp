@@ -63,6 +63,13 @@ app.post('/addActivity', (req, res) => {
     const room = req.body.room;
     const subject = req.body.subject;
 
+    if (room === "" || subject === "")
+    {
+        res.redirect('/index.html?error=emptyfields');
+        return;
+    }
+
     // Temporary user id 1
     sql.addActivity(1, subject, room);
+    res.redirect('/index.html?error=none');
 })
