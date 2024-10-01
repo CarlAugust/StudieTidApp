@@ -25,17 +25,9 @@ app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });
 
-app.get('/getUsers', (req, res) => {
-    res.send(sql.getUsers());
-});
-
-app.get('/getSubjects', (req, res) => {
-    res.send(sql.getSubjects());
-});
-
-app.get('/getRooms', (req, res) => {
-    res.send(sql.getRooms());
-});
+app.get('/getUsers', (req, res) => {res.send(sql.getUsers());});
+app.get('/getSubjects', (req, res) => {res.send(sql.getSubjects());});
+app.get('/getRooms', (req, res) => {res.send(sql.getRooms());});
 
 app.post('/addUser', (req, res) => {
 
