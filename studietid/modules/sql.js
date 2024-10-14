@@ -149,6 +149,26 @@ function getRooms()
     return rows;
 }
 
+function getActivity(admin, id)
+{
+    if (admin == true)
+    {
+        let sql = db.prepare(`SELECT * FROM activity`);
+
+        let rows = sql.all();
+
+        return rows;
+    }
+    else
+    {
+        let sql = db.prepare(`SELECT * FROM activity WHERE idUser = ?`);
+
+        let rows = sql.all(id);
+
+        return rows;
+    }
+}
+
 // Exports
 //------------------------------------------------//
 
@@ -163,5 +183,6 @@ module.exports = {
     getUser,
     getUsers,
     getSubjects,
+    getActivity,
     getRooms
   };

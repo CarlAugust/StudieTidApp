@@ -3,26 +3,71 @@
 // Express variables
 const express = require("express");
 const app = express();
-const session = require('express-session');
 const path = require('path').join(__dirname, 'public');
+
+const session = require('express-session');
+app.use(session({
+    secret: 'Keep it secret',
+    resave: false,
+    saveUninitialized: false
+}));
 
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Bcrypt
+const bcrypt = require('bcrypt');
+
 // Modules
 const sql = require('./modules/sql.js');
 
-// Defualt path
-app.use(express.static(path));
 
+function checkUser(req, res, next)
+{
+    if (req.session && req.session.loggedIn)
+    {
+        next();
+    }
+    else
+    {
+        res.redirect('/login.html');
+    }
+}
 
-app.get("/", (req, res) => {
+app.get("/", checkUser, (req, res) => {
     res.redirect('/index.html');
 });
 
+app.use(express.static(path));
+
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
+});
+
+app.post('/login', (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    console.log(password);
+
+    let user = sql.getUser(email);
+
+    if (user === undefined)
+    {
+        res.redirect('/login.html');
+        return;
+    }
+
+    bcrypt.compare(password, user.password, (err, result) => {
+        if (result)
+        {
+            res.redirect('/index.html');
+        }
+        else
+        {
+            res.redirect('/login.html');
+        }
+    });
 });
 
 app.get('/getUsers', (req, res) => {res.send(sql.getUsers());});
@@ -64,4 +109,12 @@ app.post('/addActivity', (req, res) => {
     // Temporary user id 1
     sql.addActivity(1, subject, room);
     res.redirect('/index.html?error=none');
+})
+
+app.get('/getActivity', (req, res) => {
+    // Temporary admin and id
+    let admin = true;
+    let id = 1;
+
+    res.send(sql.getActivity(admin, id));
 })

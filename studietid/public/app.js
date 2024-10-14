@@ -1,6 +1,7 @@
 fetchUsers();
 fetchSubjects();
 fetchRooms();
+fetchActivity();
 const params = new URLSearchParams(window.location.search);
 
 const error = params.get('error'); 
@@ -81,4 +82,21 @@ function displayPersons(persons) {
 
         
     });
+}
+
+async function fetchActivity()
+{
+    let activities = [];
+    try 
+    {
+        let response = await fetch('/getActivity');
+        let data = await response.json();
+        activities = data;
+
+        console.log(data);
+    }
+    catch (error)
+    {
+        console.log('Error:', error);
+    }
 }
