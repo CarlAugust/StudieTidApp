@@ -109,7 +109,7 @@ function deleteRoom(name)
 function getUser(email)
 {
     let sql = db.prepare(
-        `SELECT user.id as userID, user.firstName, user.lastName, role.id as roleID, role.name as role, user.email
+        `SELECT user.id as userID, user.firstName, user.lastName, role.id as roleID, role.name as role, user.email, user.password as password
         FROM user
         inner join role on user.idRole = role.id
         WHERE user.email = ?`);
@@ -122,7 +122,7 @@ function getUser(email)
 function getUsers()
 {
     let sql = db.prepare(
-        `SELECT user.id as userID, user.firstName, user.lastName, role.id as roleID, role.name as role, user.email
+        `SELECT user.id as userID, user.firstName, user.lastName, role.id as roleID, role.name as role, user.email, user.password as password
         FROM user
         inner join role on user.idRole = role.id`);
 

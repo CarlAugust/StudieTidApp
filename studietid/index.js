@@ -45,10 +45,10 @@ app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
+
     const email = req.body.email;
     const password = req.body.password;
-    console.log(password);
 
     let user = sql.getUser(email);
 
@@ -58,16 +58,21 @@ app.post('/login', (req, res) => {
         return;
     }
 
-    bcrypt.compare(password, user.password, (err, result) => {
-        if (result)
-        {
-            res.redirect('/index.html');
-        }
-        else
-        {
-            res.redirect('/login.html');
-        }
-    });
+    console.log(user.password);
+    console.log(req.body.password);
+
+    let isPassword = bcrypt.compareSync(password, user.password);
+
+    console.log(isPassword);
+
+    if (isPassword)
+    {
+        res.redirect('/index.html');
+    }
+    else
+    {
+        res.redirect('/login.html');
+    }
 });
 
 app.get('/getUsers', (req, res) => {res.send(sql.getUsers());});
