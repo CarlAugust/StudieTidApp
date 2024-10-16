@@ -1,6 +1,8 @@
 fetchUsers();
 fetchSubjects();
 fetchRooms();
+
+console.log('fetchActivity()')
 fetchActivity();
 const params = new URLSearchParams(window.location.search);
 
@@ -93,7 +95,7 @@ async function fetchActivity()
         let data = await response.json();
         activities = data;
 
-        console.log(data);
+        console.log(activities);
     }
     catch (error)
     {

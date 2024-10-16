@@ -24,7 +24,7 @@ function addUser(firstName, lastName, email, password, isAdmin, idRole)
         return "InUse";
     }
 
-    sql = db.prepare(`INSERT INTO user (firstName, lastName, email, password idRole, isAdmin,) VALUES (?, ?, ?, ?, ?, ?)`);
+    sql = db.prepare(`INSERT INTO user (firstName, lastName, email, password, idRole, isAdmin) VALUES (?, ?, ?, ?, ?, ?)`);
          
     sql.run(firstName, lastName, email, password, idRole, isAdmin);
 
@@ -109,7 +109,7 @@ function deleteRoom(name)
 function getUser(email)
 {
     let sql = db.prepare(
-        `SELECT user.id as userID, user.firstName, user.lastName, role.id as roleID, role.name as role, user.email, user.password as password
+        `SELECT user.id as userID, user.firstName, user.lastName, role.id as roleID, role.name as role, user.email, user.password as password, user.isAdmin as isAdmin
         FROM user
         inner join role on user.idRole = role.id
         WHERE user.email = ?`);
@@ -122,7 +122,7 @@ function getUser(email)
 function getUsers()
 {
     let sql = db.prepare(
-        `SELECT user.id as userID, user.firstName, user.lastName, role.id as roleID, role.name as role, user.email, user.password as password
+        `SELECT user.id as userID, user.firstName, user.lastName, role.id as roleID, role.name as role, user.email, user.password as password, user.isAdmin as isAdmin
         FROM user
         inner join role on user.idRole = role.id`);
 

@@ -25,10 +25,8 @@ const sql = require('./modules/sql.js');
 
 function checkLoggedIn(req, res, next)
 {
-    console.log(req.session);
     if (req.session && req.session.loggedIn)
     {
-        console.log('Logged in');
         next();
     }
     else
@@ -61,17 +59,16 @@ app.post('/login', async (req, res) => {
         return;
     }
 
-    console.log(user.password);
-    console.log(req.body.password);
-
     let isPassword = bcrypt.compareSync(password, user.password);
-
-    console.log(isPassword);
 
     if (isPassword)
     {
         req.session.loggedIn = true;
-        req.session.id = user.userID;
+        req.session.userID = user.userID;
+        req.session.isAdmin = user.roleID;
+
+        console.log(user);
+        console.log(req.session);
         res.redirect('/student');
     }
     else
@@ -93,10 +90,17 @@ app.post('/signin', async (req, res) => {
     salt = bcrypt.genSaltSync(10);
     const password = bcrypt.hashSync(req.body.password, salt);
 
+
     let result = sql.addUser(firstName, lastName, email, password, 0, 3);
 
     if (result === "Success")
     {
+        let user = sql.getUser(email);
+
+        req.session.loggedIn = true;
+        req.session.userID = user.userID;
+        req.session.isAdmin = user.isAdmin;
+
         res.redirect('/student');
     }
     else if (result === "Invalid")
@@ -118,16 +122,11 @@ app.post('/addActivity', checkLoggedIn, (req, res) => {
         res.redirect('/student');
         return;
     }
-
-    // Temporary user id 1
-    sql.addActivity(1, subject, room);
+    sql.addActivity(req.session.userID, subject, room);
     res.redirect('/student');
 })
 
 app.get('/getActivity', checkLoggedIn, (req, res) => {
-    // Temporary admin and id
-    let admin = true;
-    let id = 1;
+    res.send(sql.getActivity(req.session.isAdmin, req.session.userID));
 
-    res.send(sql.getActivity(admin, id));
 })
