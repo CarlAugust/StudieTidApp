@@ -23,20 +23,23 @@ const bcrypt = require('bcrypt');
 const sql = require('./modules/sql.js');
 
 
-function checkUser(req, res, next)
+function checkLoggedIn(req, res, next)
 {
+    console.log(req.session);
     if (req.session && req.session.loggedIn)
     {
+        console.log('Logged in');
         next();
     }
     else
     {
+        req.session.loggedIn = false;
         res.redirect('/loginpage');
     }
 }
 
-app.get("/", checkUser, (req, res) => {
-    res.redirect('/main');
+app.get("/", checkLoggedIn, (req, res) => {
+    res.redirect('/student');
 });
 
 app.use(express.static(path));
@@ -67,17 +70,19 @@ app.post('/login', async (req, res) => {
 
     if (isPassword)
     {
-        res.redirect('/main');
+        req.session.loggedIn = true;
+        req.session.id = user.userID;
+        res.redirect('/student');
     }
     else
     {
-        res.redirect('/loginpage');
+        res.redirect('/loginpage?error=Invalid');
     }
 });
 
-app.get('/getUsers', (req, res) => {res.send(sql.getUsers());});
-app.get('/getSubjects', (req, res) => {res.send(sql.getSubjects());});
-app.get('/getRooms', (req, res) => {res.send(sql.getRooms());});
+app.get('/getUsers', checkLoggedIn, (req, res) => {res.send(sql.getUsers());});
+app.get('/getSubjects', checkLoggedIn, (req, res) => {res.send(sql.getSubjects());});
+app.get('/getRooms', checkLoggedIn, (req, res) => {res.send(sql.getRooms());});
 
 app.post('/signin', async (req, res) => {
 
@@ -92,7 +97,7 @@ app.post('/signin', async (req, res) => {
 
     if (result === "Success")
     {
-        res.redirect('/main');
+        res.redirect('/student');
     }
     else if (result === "Invalid")
     {
@@ -104,22 +109,22 @@ app.post('/signin', async (req, res) => {
     }
 });
 
-app.post('/addActivity', (req, res) => {
+app.post('/addActivity', checkLoggedIn, (req, res) => {
     const room = req.body.room;
     const subject = req.body.subject;
 
     if (room === "" || subject === "")
     {
-        res.redirect('/main');
+        res.redirect('/student');
         return;
     }
 
     // Temporary user id 1
     sql.addActivity(1, subject, room);
-    res.redirect('/main');
+    res.redirect('/student');
 })
 
-app.get('/getActivity', (req, res) => {
+app.get('/getActivity', checkLoggedIn, (req, res) => {
     // Temporary admin and id
     let admin = true;
     let id = 1;
