@@ -67,9 +67,15 @@ app.post('/login', async (req, res) => {
         req.session.userID = user.userID;
         req.session.isAdmin = user.roleID;
 
-        console.log(user);
-        console.log(req.session);
-        res.redirect('/student');
+        
+        if (req.session.isAdmin === 1)
+        {
+            res.redirect('/admin');
+        }
+        else
+        {   
+            res.redirect('/student');
+        }
     }
     else
     {
@@ -101,7 +107,15 @@ app.post('/signin', async (req, res) => {
         req.session.userID = user.userID;
         req.session.isAdmin = user.isAdmin;
 
-        res.redirect('/student');
+        if (req.session.isAdmin === 1)
+        {
+            res.redirect('/admin');
+        }
+        else
+        {   
+            res.redirect('/student');
+        }
+
     }
     else if (result === "Invalid")
     {
