@@ -24,9 +24,9 @@ function addUser(firstName, lastName, email, password, isAdmin, idRole)
         return "InUse";
     }
 
-    sql = db.prepare(`INSERT INTO user (firstName, lastName, idRole, isAdmin, email, password) VALUES (?, ?, ?, ?, ?, ?)`);
+    sql = db.prepare(`INSERT INTO user (firstName, lastName, email, password idRole, isAdmin,) VALUES (?, ?, ?, ?, ?, ?)`);
          
-    sql.run(firstName, lastName, idRole, isAdmin, email, password);
+    sql.run(firstName, lastName, email, password, idRole, isAdmin);
 
     return "Success";
 };

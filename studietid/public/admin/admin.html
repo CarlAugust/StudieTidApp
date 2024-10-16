@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
     <title>App</title>
 </head>
 <body>
@@ -14,23 +14,15 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="box history">
-            <h2>History</h2>
-            <p>Pending</p>
+    <div class="container" id="adminActivityScreen">
+        <div class="box">
+            <h2>Pending</h2>
         </div>
-        <div class="box register">
-            <h2>Registrer aktivitet</h2>
-            <form method="POST" action="/addActivity">
-                <select id="roomSelector" name="room">
-                    <option value="">Velg Rom</option>
-                </select>
-                <select id="subjectSelector" name="subject">
-                    <option value="">Velg Fag</option>
-                </select>
-                <input type="text" placeholder="Mål">
-                <button type="submit">+</button>
-            </form>
+        <div class="box">
+            <h2>Denied</h2>
+        </div>
+        <div class="box">
+            <h2>Accepted</h2>
         </div>
     </div>
 

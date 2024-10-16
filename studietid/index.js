@@ -31,12 +31,12 @@ function checkUser(req, res, next)
     }
     else
     {
-        res.redirect('/login.html');
+        res.redirect('/loginpage');
     }
 }
 
 app.get("/", checkUser, (req, res) => {
-    res.redirect('/index.html');
+    res.redirect('/main');
 });
 
 app.use(express.static(path));
@@ -54,7 +54,7 @@ app.post('/login', async (req, res) => {
 
     if (user === undefined)
     {
-        res.redirect('/login.html');
+        res.redirect('/loginpage');
         return;
     }
 
@@ -67,11 +67,11 @@ app.post('/login', async (req, res) => {
 
     if (isPassword)
     {
-        res.redirect('/index.html');
+        res.redirect('/main');
     }
     else
     {
-        res.redirect('/login.html');
+        res.redirect('/loginpage');
     }
 });
 
@@ -92,15 +92,15 @@ app.post('/signin', async (req, res) => {
 
     if (result === "Success")
     {
-        res.redirect('/index.html');
+        res.redirect('/main');
     }
     else if (result === "Invalid")
     {
-        res.redirect('/login.html');
+        res.redirect('/loginpage');
     }
     else
     {
-        res.redirect('/login.html');
+        res.redirect('/loginpage');
     }
 });
 
@@ -110,13 +110,13 @@ app.post('/addActivity', (req, res) => {
 
     if (room === "" || subject === "")
     {
-        res.redirect('/index.html?error=emptyfields');
+        res.redirect('/main');
         return;
     }
 
     // Temporary user id 1
     sql.addActivity(1, subject, room);
-    res.redirect('/index.html?error=none');
+    res.redirect('/main');
 })
 
 app.get('/getActivity', (req, res) => {
