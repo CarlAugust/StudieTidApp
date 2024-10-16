@@ -6,7 +6,7 @@ const db = require('better-sqlite3')('database.db', { verbose: console.log });
 // Here are all the add related functions
 //------------------------------------------------//
 
-function addUser(firstName, lastName, email, isAdmin, idRole)
+function addUser(firstName, lastName, email, password, isAdmin, idRole)
 {
     let re = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
@@ -24,9 +24,9 @@ function addUser(firstName, lastName, email, isAdmin, idRole)
         return "InUse";
     }
 
-    sql = db.prepare(`INSERT INTO user (firstName, lastName, idRole, isAdmin, email) VALUES (?, ?, ?, ?, ?)`);
+    sql = db.prepare(`INSERT INTO user (firstName, lastName, idRole, isAdmin, email, password) VALUES (?, ?, ?, ?, ?, ?)`);
          
-    sql.run(firstName, lastName, idRole, isAdmin, email);
+    sql.run(firstName, lastName, idRole, isAdmin, email, password);
 
     return "Success";
 };

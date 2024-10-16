@@ -79,25 +79,28 @@ app.get('/getUsers', (req, res) => {res.send(sql.getUsers());});
 app.get('/getSubjects', (req, res) => {res.send(sql.getSubjects());});
 app.get('/getRooms', (req, res) => {res.send(sql.getRooms());});
 
-app.post('/addUser', (req, res) => {
+app.post('/signin', async (req, res) => {
 
     const email = req.body.email;
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
 
-    let result = sql.addUser(firstName, lastName, email, 0, 3);
+    salt = bcrypt.genSaltSync(10);
+    const password = bcrypt.hashSync(req.body.password, salt);
+
+    let result = sql.addUser(firstName, lastName, email, password, 0, 3);
 
     if (result === "Success")
     {
-        res.redirect('/index.html?error=none');
+        res.redirect('/index.html');
     }
     else if (result === "Invalid")
     {
-        res.redirect('/index.html?error=invalidemail');
+        res.redirect('/login.html');
     }
     else
     {
-        res.redirect('/index.html?error=emailinuse');
+        res.redirect('/login.html');
     }
 });
 
