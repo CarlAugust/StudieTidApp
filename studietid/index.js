@@ -1,5 +1,8 @@
 // Porpuse: Main file for the application
 
+// Modules
+const sql = require('./modules/sql.js');
+
 // Express variables
 const express = require("express");
 const app = express();
@@ -9,7 +12,8 @@ const session = require('express-session');
 app.use(session({
     secret: 'Keep it secret',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {secure: false}
 }));
 
 // Body parser
@@ -19,20 +23,18 @@ app.use(express.urlencoded({ extended: true }));
 // Bcrypt
 const bcrypt = require('bcrypt');
 
-// Modules
-const sql = require('./modules/sql.js');
-
 
 function checkLoggedIn(req, res, next)
 {
     if (req.session && req.session.loggedIn)
     {
+        console.log("NEXT!!!!!!");
         next();
     }
     else
     {
         req.session.loggedIn = false;
-        res.redirect('/loginpage');
+        return res.redirect('/loginpage/');
     }
 }
 
@@ -40,13 +42,11 @@ app.get("/", checkLoggedIn, (req, res) => {
     res.redirect('/student');
 });
 
-app.use(express.static(path));
+app.get("/student/?", checkLoggedIn, (req, res) => {
+    console.log("user on student page");
+})  
 
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
-});
-
-app.post('/login', async (req, res) => {
+app.post('/login/*', async (req, res) => {
 
     const email = req.body.email;
     const password = req.body.password;
@@ -144,3 +144,8 @@ app.get('/getActivity', checkLoggedIn, (req, res) => {
     res.send(sql.getActivity(req.session.isAdmin, req.session.userID));
 
 })
+
+app.use(express.static(path));
+app.listen(3000, () => {
+    console.log('Server is running on http://localhost:3000');
+});
