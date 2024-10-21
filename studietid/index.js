@@ -46,7 +46,7 @@ app.get("/student/?", checkLoggedIn, (req, res) => {
     console.log("user on student page");
 })  
 
-app.post('/login/*', async (req, res) => {
+app.post('/login', async (req, res) => {
 
     const email = req.body.email;
     const password = req.body.password;
