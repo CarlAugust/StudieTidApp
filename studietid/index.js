@@ -6,7 +6,8 @@ const sql = require('./modules/sql.js');
 // Express variables
 const express = require("express");
 const app = express();
-const path = require('path').join(__dirname, 'public');
+const path = require('path')
+const staticPath = path.join(__dirname, 'public');
 
 const session = require('express-session');
 app.use(session({
@@ -28,7 +29,6 @@ function checkLoggedIn(req, res, next)
 {
     if (req.session && req.session.loggedIn)
     {
-        console.log("NEXT!!!!!!");
         next();
     }
     else
@@ -38,13 +38,33 @@ function checkLoggedIn(req, res, next)
     }
 }
 
+function checkAdmin(req, res, next)
+{
+    if (req.session.isAdmin === 1)
+    {
+        next();
+    }
+    else
+    {
+        res.redirect('/student');
+    }
+}
+
 app.get("/", checkLoggedIn, (req, res) => {
     res.redirect('/student');
 });
 
-app.get("/student/?", checkLoggedIn, (req, res) => {
+app.get('/student/*', checkLoggedIn, (req, res) => {
     console.log("user on student page");
-})  
+    res.sendFile(path.join(__dirname, "/public/student"));
+});  
+
+app.get('/admin/*', checkLoggedIn, (req, res) => {
+    console.log("user on admin page");
+    res.sendFile(path.join(__dirname, "/public/admin"));
+});
+
+
 
 app.post('/login', async (req, res) => {
 
@@ -67,15 +87,13 @@ app.post('/login', async (req, res) => {
         req.session.userID = user.userID;
         req.session.isAdmin = user.roleID;
 
-        
-        if (req.session.isAdmin === 1)
-        {
-            res.redirect('/admin');
-        }
-        else
-        {   
-            res.redirect('/student');
-        }
+        req.session.save(() => {
+            if (req.session.isAdmin === 1) {
+                return res.redirect('/admin');
+            } else {   
+                return res.redirect('/student');
+            }
+        });
     }
     else
     {
@@ -107,14 +125,13 @@ app.post('/signin', async (req, res) => {
         req.session.userID = user.userID;
         req.session.isAdmin = user.isAdmin;
 
-        if (req.session.isAdmin === 1)
-        {
-            res.redirect('/admin');
-        }
-        else
-        {   
-            res.redirect('/student');
-        }
+        req.session.save(() => {
+            if (req.session.isAdmin === 1) {
+                return res.redirect('/admin');
+            } else {   
+                return res.redirect('/student');
+            }
+        });
 
     }
     else if (result === "Invalid")
@@ -145,7 +162,8 @@ app.get('/getActivity', checkLoggedIn, (req, res) => {
 
 })
 
-app.use(express.static(path));
+app.use(express.static(staticPath));
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });
+
