@@ -57,8 +57,8 @@ app.get('/getUsers', checkLoggedIn, (req, res) => {res.send(sql.getUsers());});
 app.get('/getSubjects', checkLoggedIn, (req, res) => {res.send(sql.getSubjects());});
 app.get('/getRooms', checkLoggedIn, (req, res) => {res.send(sql.getRooms());});
 
-app.get('/getActivity', checkLoggedIn, (req, res) => {
-    res.send(sql.getActivity(req.session.role, req.session.userID));
+app.get('/getActivities', checkLoggedIn, (req, res) => {
+    res.send(sql.getActivities());
 })
 
 // Login routes

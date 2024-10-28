@@ -150,22 +150,11 @@ export function getRooms()
     return rows;
 }
 
-export function getActivity(admin, id)
+export function getActivities()
 {
-    if (admin == true)
-    {
-        let sql = db.prepare(`SELECT * FROM activity`);
+    let sql = db.prepare(`SELECT * FROM activity`);
 
-        let rows = sql.all();
+    let rows = sql.all();
 
-        return rows;
-    }
-    else
-    {
-        let sql = db.prepare(`SELECT * FROM activity WHERE idUser = ?`);
-
-        let rows = sql.all(id);
-
-        return rows;
-    }
+    return rows;
 }

@@ -1,9 +1,9 @@
-import { fetchUsers, fetchSubjects, fetchRooms, fetchActivity } from '../api.js';
+import { fetchUsers, fetchSubjects, fetchRooms, fetchActivities } from '../api.js';
 
 fetchUsers();
 fetchSubjects();
 fetchRooms();
-fetchActivity();
+fetchActivities();
 
 const params = new URLSearchParams(window.location.search);
 

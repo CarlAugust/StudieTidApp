@@ -7,22 +7,7 @@ export async function fetchUsers() {
         let data = await response.json();
         persons = data;
 
-        const personList = document.getElementById('personList');
-        personList.innerHTML = '<tr><th>First name</th><th>Last name</th><th>Email</th><th>Role</th></tr>'; // Tøm listen først
-        
-        persons.forEach(person => {
-            console.log(person);
-            let tableRow = document.createElement('tr');
-            tableRow.innerHTML += 
-            `<td>${person.firstName}</td>
-            <td>${person.lastName}</td>
-            <td>${person.email}</td>
-            <td>${person.role}</td>`;
-    
-            personList.appendChild(tableRow);
-    
-            
-        });
+        console.log(persons);
 
     }
     catch (error)
@@ -40,10 +25,7 @@ export async function fetchSubjects() {
         let data = await response.json();
         subjects = data;
 
-        let selector = document.getElementById('subjectSelector')
-        subjects.forEach(subject => {
-            selector.innerHTML += `<option value="${subject.id}">${subject.name}</option>`;
-        });
+        return subjects;
     }
     catch (error)
     {
@@ -60,10 +42,7 @@ export async function fetchRooms() {
         let data = await response.json();
         rooms = data;
 
-        let selector = document.getElementById('roomSelector')
-        rooms.forEach(room => {
-            selector.innerHTML += `<option value="${room.id}">${room.name}</option>`;
-        });
+        return rooms;
     }
     catch (error)
     {
@@ -71,12 +50,12 @@ export async function fetchRooms() {
     }
 }
 
-export async function fetchActivity()
+export async function fetchActivities()
 {
     let activities = [];
     try 
     {
-        let response = await fetch('/getActivity');
+        let response = await fetch('/getActivities');
         let data = await response.json();
         activities = data;
 
