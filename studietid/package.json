@@ -15,5 +15,6 @@
     "express-session": "^1.18.0",
     "path": "^0.12.7",
     "sqlite3": "^5.1.7"
-  }
+  },
+  "type": "module"
 }

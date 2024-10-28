@@ -1,15 +1,22 @@
 // Porpuse: Main file for the application
 
 // Modules
-const sql = require('./modules/sql.js');
+import * as sql from './modules/sql.js';
+import { checkLoggedIn, checkAdmin } from './modules/middleware.js';
 
-// Express variables
-const express = require("express");
+// Node imports
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import session from 'express-session';
+import bcrypt from 'bcrypt';
+
 const app = express();
-const path = require('path')
-const staticPath = path.join(__dirname, 'public');
 
-const session = require('express-session');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
 app.use(session({
     secret: 'Keep it secret',
     resave: false,
@@ -17,38 +24,11 @@ app.use(session({
     cookie: {secure: false}
 }));
 
+const staticPath = path.join(__dirname, 'public');
+
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Bcrypt
-const bcrypt = require('bcrypt');
-
-
-function checkLoggedIn(req, res, next)
-{
-    if (req.session && req.session.loggedIn)
-    {
-        next();
-    }
-    else
-    {
-        req.session.loggedIn = false;
-        return res.redirect('/loginpage/');
-    }
-}
-
-function checkAdmin(req, res, next)
-{
-    if (req.session.isAdmin === 1)
-    {
-        next();
-    }
-    else
-    {
-        res.redirect('/student');
-    }
-}
 
 app.get("/", checkLoggedIn, (req, res) => {
     res.redirect('/student');
@@ -59,7 +39,7 @@ app.get('/student/*', checkLoggedIn, (req, res) => {
     res.sendFile(path.join(__dirname, "/public/student"));
 });  
 
-app.get('/admin/*', checkLoggedIn, (req, res) => {
+app.get('/admin/*', checkLoggedIn, checkAdmin, (req, res) => {
     console.log("user on admin page");
     res.sendFile(path.join(__dirname, "/public/admin"));
 });
@@ -85,10 +65,10 @@ app.post('/login', async (req, res) => {
     {
         req.session.loggedIn = true;
         req.session.userID = user.userID;
-        req.session.isAdmin = user.roleID;
+        req.session.role = user.roleID;
 
         req.session.save(() => {
-            if (req.session.isAdmin === 1) {
+            if (req.session.role === 1) {
                 return res.redirect('/admin');
             } else {   
                 return res.redirect('/student');
@@ -111,7 +91,7 @@ app.post('/signin', async (req, res) => {
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
 
-    salt = bcrypt.genSaltSync(10);
+    let salt = bcrypt.genSaltSync(10);
     const password = bcrypt.hashSync(req.body.password, salt);
 
 
@@ -123,10 +103,10 @@ app.post('/signin', async (req, res) => {
 
         req.session.loggedIn = true;
         req.session.userID = user.userID;
-        req.session.isAdmin = user.isAdmin;
+        req.session.role = user.role;
 
         req.session.save(() => {
-            if (req.session.isAdmin === 1) {
+            if (req.session.role === 1) {
                 return res.redirect('/admin');
             } else {   
                 return res.redirect('/student');
@@ -158,7 +138,7 @@ app.post('/addActivity', checkLoggedIn, (req, res) => {
 })
 
 app.get('/getActivity', checkLoggedIn, (req, res) => {
-    res.send(sql.getActivity(req.session.isAdmin, req.session.userID));
+    res.send(sql.getActivity(req.session.role, req.session.userID));
 
 })
 

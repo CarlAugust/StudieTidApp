@@ -1,12 +1,14 @@
 // Porpuse: This file contains all the functions that interact with the database
 
-const db = require('better-sqlite3')('database.db', { verbose: console.log });
+import Database from 'better-sqlite3';
+const db = new Database('database.db', { verbose: console.log });
+db.pragma('journal_mode = WAL');
 
 
-// Here are all the add related functions
+// Here are all the add relatedfunctions
 //------------------------------------------------//
 
-function addUser(firstName, lastName, email, password, isAdmin, idRole)
+export function addUser(firstName, lastName, email, password, isAdmin, idRole)
 {
     let re = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
@@ -31,7 +33,7 @@ function addUser(firstName, lastName, email, password, isAdmin, idRole)
     return "Success";
 };
 
-function addActivity(userID, idSubject, idRoom)
+export function addActivity(userID, idSubject, idRoom)
 {
     let date = new Date();
     date = date.toISOString().slice(0, 19).replace('T', ' ');
@@ -49,7 +51,7 @@ function addActivity(userID, idSubject, idRoom)
     return rows[0];
 }
 
-function addRoom(name)
+export function addRoom(name)
 {
     let sql = db.prepare(`INSERT INTO room (name) VALUES (?)`);
     const info = sql.run(name);
@@ -62,7 +64,7 @@ function addRoom(name)
     return rows[0];
 }
 
-function addSubject(name)
+export function addSubject(name)
 {
     let sql = db.prepare(`INSERT INTO subject (name) VALUES (?)`);
     const info = sql.run(name);
@@ -78,7 +80,7 @@ function addSubject(name)
 // Here are all the delete related functions
 //------------------------------------------------//
 
-function deleteUser(email)
+export function deleteUser(email)
 {   
     let row = getUser(email);
 
@@ -91,13 +93,13 @@ function deleteUser(email)
     console.log("Termination successful");
 }
 
-function deleteSubject(name)
+export function deleteSubject(name)
 {
     let sql = db.prepare(`DELETE FROM subject WHERE name = ?`);
     sql.run(name);
 }
 
-function deleteRoom(name)
+export function deleteRoom(name)
 {
     let sql = db.prepare(`DELETE FROM room WHERE name = ?`);
     sql.run(name);
@@ -106,7 +108,7 @@ function deleteRoom(name)
 // Here are all the get related functions
 //------------------------------------------------//
 
-function getUser(email)
+export function getUser(email)
 {
     let sql = db.prepare(
         `SELECT user.id as userID, user.firstName, user.lastName, role.id as roleID, role.name as role, user.email, user.password as password, user.isAdmin as isAdmin
@@ -119,7 +121,7 @@ function getUser(email)
     return rows[0];
 }
 
-function getUsers()
+export function getUsers()
 {
     let sql = db.prepare(
         `SELECT user.id as userID, user.firstName, user.lastName, role.id as roleID, role.name as role, user.email, user.password as password, user.isAdmin as isAdmin
@@ -131,7 +133,7 @@ function getUsers()
     return rows;
 }
 
-function getSubjects()
+export function getSubjects()
 {
     let sql = db.prepare(`SELECT * FROM subject`);
 
@@ -140,7 +142,7 @@ function getSubjects()
     return rows;
 }
 
-function getRooms()
+export function getRooms()
 {
     let sql = db.prepare(`SELECT * FROM room`);
 
@@ -149,7 +151,7 @@ function getRooms()
     return rows;
 }
 
-function getActivity(admin, id)
+export function getActivity(admin, id)
 {
     if (admin == true)
     {
@@ -168,21 +170,3 @@ function getActivity(admin, id)
         return rows;
     }
 }
-
-// Exports
-//------------------------------------------------//
-
-module.exports = {
-    addUser,
-    addActivity,
-    addRoom,
-    addSubject,
-    deleteUser,
-    deleteSubject,
-    deleteRoom,
-    getUser,
-    getUsers,
-    getSubjects,
-    getActivity,
-    getRooms
-  };
