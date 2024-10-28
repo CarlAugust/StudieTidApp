@@ -7,7 +7,7 @@ export async function fetchUsers() {
         let data = await response.json();
         persons = data;
 
-        console.log(persons);
+        return persons;
 
     }
     catch (error)
