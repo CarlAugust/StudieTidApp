@@ -66,3 +66,20 @@ export async function fetchActivities()
         console.log('Error:', error);
     }
 }
+
+export async function fetchActivity()
+{
+    let activity = [];
+    try 
+    {
+        let response = await fetch('/getActivity');
+        let data = await response.json();
+        activity = data;
+
+        return activity;
+    }
+    catch (error)
+    {
+        console.log('Error:', error);
+    }
+}

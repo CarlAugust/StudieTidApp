@@ -61,6 +61,10 @@ app.get('/getActivities', checkLoggedIn, (req, res) => {
     res.send(sql.getActivities());
 })
 
+app.get('/getActivity', checkLoggedIn, (req, res) => {
+    res.send(sql.getActivity(req.session.userID));
+});
+
 // Login routes
 
 app.post('/login', async (req, res) => {

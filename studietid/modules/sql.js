@@ -158,3 +158,12 @@ export function getActivities()
 
     return rows;
 }
+
+export function getActivity(id)
+{
+    let sql = db.prepare(`SELECT * FROM activity WHERE idUser = ?`);
+
+    let rows = sql.all(id);
+
+    return rows;
+}
