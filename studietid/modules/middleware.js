@@ -11,6 +11,17 @@ export function checkLoggedIn(req, res, next)
     }
 }
 
+export function checkTeacher(req, res, next)
+{
+    if (req.session.role === 2 || req.session.role === 1)	// Teacher or Admin
+    {
+        next();
+    }
+    else
+    {
+        res.redirect('/student');
+    }
+}
 export function checkAdmin(req, res, next)
 {
     if (req.session.role === 1)

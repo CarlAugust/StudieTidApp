@@ -3,42 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
-    <title>App</title>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="header">
-        <div class="user">
-            <img src="" alt="User Image">
-            <span>BRUKER</span>
-        </div>
-    </div>
-
-    <div class="container" id="adminActivityScreen">
-        <div class="box">
-            <h2>Pending</h2>
-        </div>
-        <div class="box">
-            <h2>Denied</h2>
-        </div>
-        <div class="box">
-            <h2>Accepted</h2>
-        </div>
-    </div>
-
-    <div id="logAndReg">
-        <div id="login">
-            <table width="80%" id="personList"></table>
-
-            <form id="loginForm" method="POST" action="/addUser">
-                <input type="text" name="firstName" placeholder="First name" required>
-                <input type="text" name="lastName" placeholder="Last name" required>
-                <input type="text" name="email" placeholder="Email" required>
-                <button type="submit">Login</button>
-            </form>
-        </div>
-    </div>
-    
-    <script type="module" src="app.js"></script>
+    <header>
+        <h1>Admin Panel</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#users">Users</a></li>
+            <li><a href="#settings">Settings</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="dashboard">
+            <h2>Dashboard</h2>
+            <p>Welcome to the admin dashboard.</p>
+        </section>
+        <section id="users">
+            <h2>Users</h2>
+            <p>Manage users here.</p>
+        </section>
+        <section id="settings">
+            <h2>Settings</h2>
+            <p>Adjust your settings here.</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Your Company</p>
+    </footer>
+    <script type="module" src="script.js"></script>
 </body>
 </html>

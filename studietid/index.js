@@ -2,7 +2,7 @@
 
 // Modules
 import * as sql from './modules/sql.js';
-import { checkLoggedIn, checkAdmin } from './modules/middleware.js';
+import { checkLoggedIn, checkAdmin, checkTeacher } from './modules/middleware.js';
 
 // Node imports
 import express from 'express';
@@ -30,6 +30,8 @@ const staticPath = path.join(__dirname, 'public');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Page routes
+
 app.get("/", checkLoggedIn, (req, res) => {
     res.redirect('/student');
 });
@@ -39,12 +41,27 @@ app.get('/student/*', checkLoggedIn, (req, res) => {
     res.sendFile(path.join(__dirname, "/public/student"));
 });  
 
+app.get('/teacher/*', checkLoggedIn, checkTeacher, (req, res) => {
+    console.log("user on teacher page");
+    res.sendFile(path.join(__dirname, "/public/teacher"));
+});
+
 app.get('/admin/*', checkLoggedIn, checkAdmin, (req, res) => {
     console.log("user on admin page");
     res.sendFile(path.join(__dirname, "/public/admin"));
 });
 
+// API routes 
 
+app.get('/getUsers', checkLoggedIn, (req, res) => {res.send(sql.getUsers());});
+app.get('/getSubjects', checkLoggedIn, (req, res) => {res.send(sql.getSubjects());});
+app.get('/getRooms', checkLoggedIn, (req, res) => {res.send(sql.getRooms());});
+
+app.get('/getActivity', checkLoggedIn, (req, res) => {
+    res.send(sql.getActivity(req.session.role, req.session.userID));
+})
+
+// Login routes
 
 app.post('/login', async (req, res) => {
 
@@ -70,6 +87,9 @@ app.post('/login', async (req, res) => {
         req.session.save(() => {
             if (req.session.role === 1) {
                 return res.redirect('/admin');
+            }
+            else if (req.session.role === 2) {
+                return res.redirect('/teacher');
             } else {   
                 return res.redirect('/student');
             }
@@ -80,10 +100,6 @@ app.post('/login', async (req, res) => {
         res.redirect('/loginpage?error=Invalid');
     }
 });
-
-app.get('/getUsers', checkLoggedIn, (req, res) => {res.send(sql.getUsers());});
-app.get('/getSubjects', checkLoggedIn, (req, res) => {res.send(sql.getSubjects());});
-app.get('/getRooms', checkLoggedIn, (req, res) => {res.send(sql.getRooms());});
 
 app.post('/signin', async (req, res) => {
 
@@ -107,7 +123,7 @@ app.post('/signin', async (req, res) => {
 
         req.session.save(() => {
             if (req.session.role === 1) {
-                return res.redirect('/admin');
+                return res.redirect('/teacher');
             } else {   
                 return res.redirect('/student');
             }
@@ -124,6 +140,8 @@ app.post('/signin', async (req, res) => {
     }
 });
 
+// Client add routes
+
 app.post('/addActivity', checkLoggedIn, (req, res) => {
     const room = req.body.room;
     const subject = req.body.subject;
@@ -135,11 +153,6 @@ app.post('/addActivity', checkLoggedIn, (req, res) => {
     }
     sql.addActivity(req.session.userID, subject, room);
     res.redirect('/student');
-})
-
-app.get('/getActivity', checkLoggedIn, (req, res) => {
-    res.send(sql.getActivity(req.session.role, req.session.userID));
-
 })
 
 app.use(express.static(staticPath));
