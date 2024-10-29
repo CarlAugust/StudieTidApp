@@ -159,6 +159,18 @@ app.post('/addActivity', checkLoggedIn, (req, res) => {
     res.redirect('/student');
 })
 
+// Teacher activity routes
+
+app.get('/approveActivity', checkLoggedIn, checkTeacher, (req, res) => {
+    sql.approveActivity(req.query.id);
+    res.send("Success");
+});
+
+app.get('/denyActivity', checkLoggedIn, checkTeacher, (req, res) => {
+    sql.denyActivity(req.query.id);
+    res.send("Success");
+}); 
+
 app.use(express.static(staticPath));
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');

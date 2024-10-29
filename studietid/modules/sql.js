@@ -152,7 +152,19 @@ export function getRooms()
 
 export function getActivities()
 {
-    let sql = db.prepare(`SELECT * FROM activity INNER JOIN user ON activity.idUser = user.id`);
+    let sql = db.prepare(`SELECT 
+    activity.id AS activity_id,
+    activity.startTime,
+    activity.idStatus,
+    activity.idSubject,
+    activity.idRoom,
+    user.id AS user_id,
+    user.firstName,
+    user.lastName
+    FROM 
+    activity
+    INNER JOIN 
+    user ON activity.idUser = user.id;`);
 
     let rows = sql.all();
 
@@ -166,4 +178,18 @@ export function getActivity(id)
     let rows = sql.all(id);
 
     return rows;
+}
+
+export function approveActivity(id)
+{
+    let sql = db.prepare(`UPDATE activity SET idStatus = 2 WHERE id = ?`);
+
+    sql.run(id);
+}
+
+export function denyActivity(id)
+{
+    let sql = db.prepare(`UPDATE activity SET idStatus = 3 WHERE id = ?`);
+
+    sql.run(id);
 }

@@ -1,53 +1,86 @@
 import { fetchUsers, fetchSubjects, fetchRooms, fetchActivities } from '../api.js';
 
+async function approveActivity()
+{
+    let id = this.value;
+    try {
+        await fetch(`/approveActivity?id=${id}`);
+        activitiesSet();
+    }
+    catch (error)
+    {
+        console.log('Error:', error);
+    }
+}
+
+async function denyActivity()
+{
+    let id = this.value;
+    try {
+        await fetch(`/denyActivity?id=${id}`);
+        activitiesSet();
+    }
+    catch (error)
+    {
+        console.log('Error:', error);
+    }
+}
+
 const activitiesSet = () => {
     fetchActivities().then(activities => {
+        const pendingContainer = document.getElementById('pending');
+        const acceptedContainer = document.getElementById('accepted');
+        const deniedContainer = document.getElementById('denied');
+
+        pendingContainer.innerHTML = "";
+        acceptedContainer.innerHTML = "";
+        deniedContainer.innerHTML = "";
+
         activities.forEach(activity => {
-            if (activity.idStatus == 1) {
-                let selector = document.getElementById('pending');
-                selector.innerHTML += 
-                `
-                <div class="activity">
-                    <h2>${activity.startTime}</h2>
-                    <h3>${activity.firstName} ${activity.lastName}</h3>
-                    <h3>${activity.idSubject}</h3>
-                    <h3>${activity.idRoom}</h3>
-                    <button value="${activity.id}" onclick="approveActivity">Approve</button>
-                    <button value="${activity.id}" onclick="denyActivity">Deny</button>
-                </div>
-                `;
-            }
-            else if (activity.idStatus == 2)
-            {
-                let selector = document.getElementById('accepted');
-                selector.innerHTML += 
-                `
-                <div class="activity">
-                    <h2>${activity.startTime}</h2>
-                    <h3>${activity.firstName} ${activity.lastName}</h3>
-                    <h3>${activity.idSubject}</h3>
-                    <h3>${activity.idRoom}</h3>
-                    <button value="${activity.id}" onclick="denyActivity">Deny</button>
-                </div>
-                `;
-            }
-            else
-            {
-                let selector = document.getElementById('denied');
-                selector.innerHTML += 
-                `
-                <div class="activity">
-                    <h2>${activity.startTime}</h2>
-                    <h3>${activity.firstName} ${activity.lastName}</h3>
-                    <h3>${activity.idSubject}</h3>
-                    <h3>${activity.idRoom}</h3>
-                    <button value="${activity.id}" onclick="approveActivity">Approve</button>
-                </div>
-                `;
+            const activityElement = document.createElement('div');
+            activityElement.classList.add('activity');
+            activityElement.innerHTML = `
+                <h2>${activity.startTime}</h2>
+                <h3>${activity.firstName} ${activity.lastName}</h3>
+                <h3>${activity.idSubject}</h3>
+                <h3>${activity.idRoom}</h3>
+            `;
+
+            if (activity.idStatus === 1) {
+                const approveButton = document.createElement('button');
+                approveButton.textContent = 'Approve';
+                approveButton.value = activity.activity_id;
+                approveButton.addEventListener('click', approveActivity);
+
+                const denyButton = document.createElement('button');
+                denyButton.textContent = 'Deny';
+                denyButton.value = activity.activity_id;
+                denyButton.addEventListener('click', denyActivity);
+
+                activityElement.appendChild(approveButton);
+                activityElement.appendChild(denyButton);
+
+                pendingContainer.appendChild(activityElement);
+            } else if (activity.idStatus === 2) {
+                const denyButton = document.createElement('button');
+                denyButton.textContent = 'Deny';
+                denyButton.value = activity.activity_id;
+                denyButton.addEventListener('click', denyActivity);
+
+                activityElement.appendChild(denyButton);
+                acceptedContainer.appendChild(activityElement);
+            } else {
+                const approveButton = document.createElement('button');
+                approveButton.textContent = 'Approve';
+                approveButton.value = activity.activity_id;
+                approveButton.addEventListener('click', approveActivity);
+
+                activityElement.appendChild(approveButton);
+                deniedContainer.appendChild(activityElement);
             }
         });
     });
-}
+};
 
 activitiesSet();
 
