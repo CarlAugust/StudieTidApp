@@ -43,54 +43,10 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    background-color: #25CC9F;
 }
 
-.history {
+.activity {
     background-color: #25CC7B;
     color: white;
-}
-
-.register {
-    background-color: #29C4E3;
-    color: white;
-    justify-content: center;
-}
-
-.history h2, .register h2 {
-    margin-top: 0;
-}
-
-.register select {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    border: none;
-}
-
-.register input {
-    width:90%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    border: none;
-}
-
-.register input[type="text"] {
-    background-color: white;
-    color: black;
-}
-
-.register button {
-    display: block;
-    margin: 20px auto;
-    padding: 10px;
-    border: none;
-    background-color: #082156;
-    color: white;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-    line-height: 20px;
 }

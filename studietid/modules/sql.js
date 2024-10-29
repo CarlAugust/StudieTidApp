@@ -152,7 +152,7 @@ export function getRooms()
 
 export function getActivities()
 {
-    let sql = db.prepare(`SELECT * FROM activity`);
+    let sql = db.prepare(`SELECT * FROM activity INNER JOIN user ON activity.idUser = user.id`);
 
     let rows = sql.all();
 

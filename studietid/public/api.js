@@ -59,7 +59,7 @@ export async function fetchActivities()
         let data = await response.json();
         activities = data;
 
-        console.log(activities);
+        return activities;
     }
     catch (error)
     {
