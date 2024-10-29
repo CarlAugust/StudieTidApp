@@ -32,9 +32,9 @@ const activitiesSet = () => {
         const acceptedContainer = document.getElementById('accepted');
         const deniedContainer = document.getElementById('denied');
 
-        pendingContainer.innerHTML = "";
-        acceptedContainer.innerHTML = "";
-        deniedContainer.innerHTML = "";
+        pendingContainer.innerHTML = "<h2>Pending</h2>";
+        acceptedContainer.innerHTML = "<h2>Accepted</h2>";
+        deniedContainer.innerHTML = "<h2>Denied</h2>";
 
         activities.forEach(activity => {
             const activityElement = document.createElement('div');
