@@ -46,35 +46,29 @@ const activitiesSet = () => {
                 <h3>${activity.idRoom}</h3>
             `;
 
-            if (activity.idStatus === 1) {
-                const approveButton = document.createElement('button');
-                approveButton.textContent = 'Approve';
-                approveButton.value = activity.activity_id;
-                approveButton.addEventListener('click', approveActivity);
+            const approveButton = document.createElement('button');
+            approveButton.textContent = 'Approve';
+            approveButton.value = activity.activity_id;
+            approveButton.addEventListener('click', approveActivity);
 
-                const denyButton = document.createElement('button');
-                denyButton.textContent = 'Deny';
-                denyButton.value = activity.activity_id;
-                denyButton.addEventListener('click', denyActivity);
+            const denyButton = document.createElement('button');
+            denyButton.textContent = 'Deny';
+            denyButton.value = activity.activity_id;
+            denyButton.addEventListener('click', denyActivity);
 
+            if (activity.idStatus === 1)
+            {
                 activityElement.appendChild(approveButton);
                 activityElement.appendChild(denyButton);
-
                 pendingContainer.appendChild(activityElement);
-            } else if (activity.idStatus === 2) {
-                const denyButton = document.createElement('button');
-                denyButton.textContent = 'Deny';
-                denyButton.value = activity.activity_id;
-                denyButton.addEventListener('click', denyActivity);
-
+            } 
+            else if (activity.idStatus === 2)
+            {
                 activityElement.appendChild(denyButton);
                 acceptedContainer.appendChild(activityElement);
-            } else {
-                const approveButton = document.createElement('button');
-                approveButton.textContent = 'Approve';
-                approveButton.value = activity.activity_id;
-                approveButton.addEventListener('click', approveActivity);
-
+            }
+            else
+            {
                 activityElement.appendChild(approveButton);
                 deniedContainer.appendChild(activityElement);
             }
