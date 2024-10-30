@@ -30,16 +30,24 @@ const activitiesSet = () => {
     fetchActivities().then(activities => {
         const container = document.getElementById('activityScreen');
 
-        container.innerHTML = "<h1>Aktiviteter</h1>";
+        container.innerHTML = `
+        <tr class="headerRow">
+            <th>Starttid</th>
+            <th>Navn</th>
+            <th>Fag</th>
+            <th>Rom</th>
+            <th>Status<th>
+        </tr>
+        `;
 
         activities.forEach(activity => {
-            const activityElement = document.createElement('div');
-            activityElement.classList.add('activity');
+            const activityElement = document.createElement('tr');
             activityElement.innerHTML = `
-                <h3>${activity.startTime}</h3>
-                <h3>${activity.firstName} ${activity.lastName}</h3>
-                <h3>${activity.idSubject}</h3>
-                <h3>${activity.idRoom}</h3>
+                <td>${activity.startTime}</td>
+                <td>${activity.firstName} ${activity.lastName}</td>
+                <td>${activity.idSubject}</td>
+                <td>${activity.idRoom}</td> 
+                
             `;
 
             const button = document.createElement('button');
@@ -48,23 +56,21 @@ const activitiesSet = () => {
             {
                 button.textContent = 'Pending';
                 denyButton.addEventListener('click', approveActivity);
-                activityElement.appendChild(button);
-                container.appendChild(activityElement);
             } 
             else if (activity.idStatus === 2)
             {
                 button.textContent = 'Approved';
                 button.addEventListener('click', denyActivity);
-                activityElement.appendChild(button);
-                container.appendChild(activityElement);
             }
             else
             {
                 button.textContent = 'Denied';
                 button.addEventListener('click', approveActivity);
-                activityElement.appendChild(button);
-                container.appendChild(activityElement);
             }
+            const td = document.createElement('td');
+            td.appendChild(button);
+            activityElement.appendChild(td);
+            container.appendChild(activityElement);
         });
     });
 };
