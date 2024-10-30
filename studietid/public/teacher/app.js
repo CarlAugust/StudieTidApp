@@ -28,49 +28,42 @@ async function denyActivity()
 
 const activitiesSet = () => {
     fetchActivities().then(activities => {
-        const pendingContainer = document.getElementById('pending');
-        const acceptedContainer = document.getElementById('accepted');
-        const deniedContainer = document.getElementById('denied');
+        const container = document.getElementById('activityScreen');
 
-        pendingContainer.innerHTML = "<h2>Pending</h2>";
-        acceptedContainer.innerHTML = "<h2>Accepted</h2>";
-        deniedContainer.innerHTML = "<h2>Denied</h2>";
+        container.innerHTML = "<h1>Aktiviteter</h1>";
 
         activities.forEach(activity => {
             const activityElement = document.createElement('div');
             activityElement.classList.add('activity');
             activityElement.innerHTML = `
-                <h2>${activity.startTime}</h2>
+                <h3>${activity.startTime}</h3>
                 <h3>${activity.firstName} ${activity.lastName}</h3>
                 <h3>${activity.idSubject}</h3>
                 <h3>${activity.idRoom}</h3>
             `;
 
-            const approveButton = document.createElement('button');
-            approveButton.textContent = 'Approve';
-            approveButton.value = activity.activity_id;
-            approveButton.addEventListener('click', approveActivity);
-
-            const denyButton = document.createElement('button');
-            denyButton.textContent = 'Deny';
-            denyButton.value = activity.activity_id;
-            denyButton.addEventListener('click', denyActivity);
-
+            const button = document.createElement('button');
+            button.value = activity.activity_id;
             if (activity.idStatus === 1)
             {
-                activityElement.appendChild(approveButton);
-                activityElement.appendChild(denyButton);
-                pendingContainer.appendChild(activityElement);
+                button.textContent = 'Pending';
+                denyButton.addEventListener('click', approveActivity);
+                activityElement.appendChild(button);
+                container.appendChild(activityElement);
             } 
             else if (activity.idStatus === 2)
             {
-                activityElement.appendChild(denyButton);
-                acceptedContainer.appendChild(activityElement);
+                button.textContent = 'Approved';
+                button.addEventListener('click', denyActivity);
+                activityElement.appendChild(button);
+                container.appendChild(activityElement);
             }
             else
             {
-                activityElement.appendChild(approveButton);
-                deniedContainer.appendChild(activityElement);
+                button.textContent = 'Denied';
+                button.addEventListener('click', approveActivity);
+                activityElement.appendChild(button);
+                container.appendChild(activityElement);
             }
         });
     });
