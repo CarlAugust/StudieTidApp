@@ -45,8 +45,8 @@ const activitiesSet = () => {
             activityElement.innerHTML = `
                 <td>${activity.startTime}</td>
                 <td>${activity.firstName} ${activity.lastName}</td>
-                <td>${activity.idSubject}</td>
-                <td>${activity.idRoom}</td> 
+                <td>${activity.subject}</td>
+                <td>${activity.room}</td> 
                 
             `;
 

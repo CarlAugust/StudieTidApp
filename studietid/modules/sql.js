@@ -160,11 +160,19 @@ export function getActivities()
     activity.idRoom,
     user.id AS user_id,
     user.firstName,
-    user.lastName
+    user.lastName,
+    subject.name as subject,
+    room.name as room
     FROM 
     activity
     INNER JOIN 
-    user ON activity.idUser = user.id;`);
+    user ON activity.idUser = user.id
+    INNER JOIN
+    subject ON activity.idSubject = subject.id
+    INNER JOIN
+    room ON activity.idRoom = room.id
+    ORDER BY user.firstName ASC
+    ;`);
 
     let rows = sql.all();
 

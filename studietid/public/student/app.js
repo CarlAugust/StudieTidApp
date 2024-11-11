@@ -1,4 +1,4 @@
-import { fetchSubjects, fetchRooms, fetchActivity } from '../api.js';
+import { fetchSubjects, fetchRooms, fetchActivity, fetchUsers } from '../api.js';
 
 const subjectsSet = () => {
     fetchSubjects().then(subjects => {
@@ -31,9 +31,18 @@ const activitySet = () => {
     });
 }
 
+const users = () => {
+    fetchUsers().then(users => {
+        users.forEach(user => {
+            console.log(user);
+        });
+    });
+}
+
 subjectsSet();
 roomsSet();
 activitySet();
+users();
 
 const params = new URLSearchParams(window.location.search);
 

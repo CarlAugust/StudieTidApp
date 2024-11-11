@@ -44,3 +44,9 @@ body {
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
     background-color: #25CC9F;
 }
+
+td, th {
+    padding: 10px;
+    border-bottom: 1px solid black;
+    text-align: center;
+}
