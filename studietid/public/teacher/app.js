@@ -55,7 +55,7 @@ const activitiesSet = () => {
             if (activity.idStatus === 1)
             {
                 button.textContent = 'Pending';
-                denyButton.addEventListener('click', approveActivity);
+                button.addEventListener('click', approveActivity);
             } 
             else if (activity.idStatus === 2)
             {

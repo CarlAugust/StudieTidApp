@@ -10,6 +10,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import session from 'express-session';
 import bcrypt from 'bcrypt';
+import { configDotenv } from 'dotenv';
 
 const app = express();
 
@@ -17,8 +18,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
+configDotenv();
+const SECRET = process.env.SECRET;
+
 app.use(session({
-    secret: 'Keep it secret',
+    secret: SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {secure: false}
@@ -33,7 +37,13 @@ app.use(express.urlencoded({ extended: true }));
 // Page routes
 
 app.get("/", checkLoggedIn, (req, res) => {
-    res.redirect('/student');
+    if (req.session.role === 1) {
+        res.redirect('/admin');
+    } else if (req.session.role === 2) {
+        res.redirect('/teacher');
+    } else {
+        res.redirect('/student');
+    }
 });
 
 app.get('/student/*', checkLoggedIn, (req, res) => {
@@ -53,11 +63,11 @@ app.get('/admin/*', checkLoggedIn, checkAdmin, (req, res) => {
 
 // API routes 
 
-app.get('/getUsers', checkLoggedIn, (req, res) => {res.send(sql.getUsers());});
+app.get('/getUsers', checkLoggedIn, checkTeacher, (req, res) => {res.send(sql.getUsers());});
 app.get('/getSubjects', checkLoggedIn, (req, res) => {res.send(sql.getSubjects());});
 app.get('/getRooms', checkLoggedIn, (req, res) => {res.send(sql.getRooms());});
 
-app.get('/getActivities', checkLoggedIn, (req, res) => {
+app.get('/getActivities', checkLoggedIn, checkTeacher, (req, res) => {
     res.send(sql.getActivities());
 })
 
@@ -142,6 +152,11 @@ app.post('/signin', async (req, res) => {
     {
         res.redirect('/loginpage');
     }
+});
+
+app.post("/logout", (req, res) => {
+    req.session.destroy();
+    res.redirect('/loginpage');
 });
 
 // Client add routes
