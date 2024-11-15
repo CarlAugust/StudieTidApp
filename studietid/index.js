@@ -3,6 +3,7 @@
 // Modules
 import * as sql from './modules/sql.js';
 import { checkLoggedIn, checkAdmin, checkTeacher } from './modules/middleware.js';
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from './config.js';
 
 // Node imports
 import express from 'express';
@@ -11,6 +12,8 @@ import { fileURLToPath } from 'url';
 import session from 'express-session';
 import bcrypt from 'bcrypt';
 import { configDotenv } from 'dotenv';
+import GoogleStrategy from 'passport-google-oauth20';
+import passport from 'passport';
 
 const app = express();
 
@@ -20,6 +23,18 @@ const __dirname = path.dirname(__filename);
 
 configDotenv();
 const SECRET = process.env.SECRET;
+
+passport.use(new GoogleStrategy({
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
 
 app.use(session({
     secret: SECRET,
@@ -35,6 +50,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Page routes
+
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile'] }));
+  
+app.get('/auth/google/callback', 
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    function(req, res) {
+      // Successful authentication, redirect home.
+      res.redirect('/');
+    }
+);
 
 app.get("/", checkLoggedIn, (req, res) => {
     if (req.session.role === 1) {
