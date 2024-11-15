@@ -7,6 +7,7 @@ logs/
 
 # Ignore enviroment varible files
 .env
+config.js
 
 # Ignore build outputs
 dist/
