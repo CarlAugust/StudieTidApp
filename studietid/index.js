@@ -30,8 +30,8 @@ passport.use(new GoogleStrategy({
     callbackURL: "http://localhost:3000/auth/google/callback"
   },
   function(accessToken, refreshToken, profile, cb) {
-    console.log("profile: ", profile);
-    console.log("cb: ", cb);
+    console.log(profile);
+    console.log(cb);
   }
 ));
 
