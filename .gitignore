@@ -11,3 +11,6 @@ logs/
 # Ignore build outputs
 dist/
 build/
+
+# Ignoring the csvfiles by school request
+csvfiles/

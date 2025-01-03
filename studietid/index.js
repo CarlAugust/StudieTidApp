@@ -2,6 +2,7 @@
 
 // Modules
 import * as sql from './modules/sql.js';
+import * as fileparser from './modules/fileparser.js';
 import { checkLoggedIn, checkAdmin, checkTeacher } from './modules/middleware.js';
 
 // Node imports
@@ -190,4 +191,6 @@ app.use(express.static(staticPath));
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });
+
+fileparser.readUserData("grupper");
 

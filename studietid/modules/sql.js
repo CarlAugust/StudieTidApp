@@ -83,13 +83,12 @@ export function deleteUser(email)
 {   
     let row = getUser(email);
 
-    let sql = db.prepare(`DELETE FROM activity WHERE idUser = ?`);
+    // To anonymize the data we change the idUser to 1, which is the root user
+    let sql = db.prepare(`UPDATE activity SET idUser = 1 WHERE idUser = ?`);
     sql.run(row.userID);
 
     sql = db.prepare(`DELETE FROM user WHERE id = ?`);
     sql.run(row.userID);
-
-    console.log("Termination successful");
 }
 
 export function deleteSubject(name)
@@ -118,6 +117,11 @@ export function getUser(email)
     let rows = sql.all(email);
 
     return rows[0];
+}
+
+export function getPassword(email)
+{
+    let sql = db.prepare(`SELECT password FROM user WHERE email = ?`);
 }
 
 export function getUsers()
