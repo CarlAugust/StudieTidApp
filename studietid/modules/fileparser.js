@@ -1,8 +1,7 @@
 import fs from 'fs';
 
-export function readUserData(file)
+export function readGroupData(file)
 {
-
     const lines = fs.readFileSync(`csvfiles/${file}.csv`, `utf-8`).split(`\n`);
 
     let data = [];
@@ -13,7 +12,7 @@ export function readUserData(file)
 
         let newline = [];
 
-        for (let element of line)
+        for (const element of line)
         {
             if (element != '' && element != '\r')
             {
@@ -26,13 +25,51 @@ export function readUserData(file)
     data.pop();
     data[0].shift();
 
-    for (let i = 0; i < data.length; i++)
-    {
-        if (data[i].length === 1)
-        {
-            console.log(data[i]);   
-        }
-    }
+    let Dita = {
+        "Fag": {
+            "Kode": [], 
+            "Navn": [],
+            "KlasserTilKoder": []
+        },
+        "Klasser": []
+    };
 
-    return data;
+    data.map((element) => {
+        if (element.length == 0)
+        {
+            return;
+        }
+
+        if (element.length > 1)
+        {
+            if (element[1] !== undefined)
+            {
+                Dita.Fag.Kode.push(element[1]);
+            }
+            if (element[3] !== undefined)
+            {
+                const klasser = element[3].split(', ');
+                Dita.Fag.KlasserTilKoder.push(klasser);
+
+                for (const klasse of klasser)
+                {
+                    if (!Dita.Klasser.includes(klasse) && klasse)
+                    {
+                        Dita.Klasser.push(klasse);
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (element[0] !== undefined)
+            {
+                Dita.Fag.Navn.push(element[0].split(' ')[0]);
+            }
+        }
+    });
+
+    console.log(Dita);
+
+    return Dita;
 }
