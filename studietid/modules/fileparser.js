@@ -1,7 +1,6 @@
 import fs from 'fs';
 
-export function readGroupData(file)
-{
+const CSVFileToArrayData = (file) => {
     const lines = fs.readFileSync(`csvfiles/${file}.csv`, `utf-8`).split(`\n`);
 
     let data = [];
@@ -23,39 +22,35 @@ export function readGroupData(file)
     }
 
     data.pop();
-    data[0].shift();
+    data[0].shift(); 
 
-    let Dita = {
-        "Fag": {
-            "Kode": [], 
-            "Navn": [],
-            "KlasserTilKoder": []
-        },
-        "Klasser": []
-    };
+    return data;
+};
 
-    data.map((element) => {
+const mapCSVToSubjectWithClassesObject = (data, Dita) => {
+    data.map( (element) => 
+    {
         if (element.length == 0)
         {
             return;
         }
-
+    
         if (element.length > 1)
         {
             if (element[1] !== undefined)
             {
-                Dita.Fag.Kode.push(element[1]);
+                Dita.Subject.Code.push(element[1]);
             }
             if (element[3] !== undefined)
             {
-                const klasser = element[3].split(', ');
-                Dita.Fag.KlasserTilKoder.push(klasser);
-
-                for (const klasse of klasser)
+                const classes = element[3].split(', ');
+                Dita.Subject.ClassesToCodes.push(classes);
+    
+                for (const c of classes)
                 {
-                    if (!Dita.Klasser.includes(klasse) && klasse)
+                    if (!Dita.Classes.includes(c) && c)
                     {
-                        Dita.Klasser.push(klasse);
+                        Dita.Classes.push(c);
                     }
                 }
             }
@@ -64,10 +59,27 @@ export function readGroupData(file)
         {
             if (element[0] !== undefined)
             {
-                Dita.Fag.Navn.push(element[0].split(' ')[0]);
+                Dita.Subject.Name.push(element[0].split(' ')[0]);
             }
         }
     });
+};
+
+
+export function readGroupData(file)
+{
+    let data = CSVFileToArrayData(file);
+
+    let Dita = {
+        "Subject": {
+            "Code": [], 
+            "Name": [],
+            "ClassesToCodes": []
+        },
+        "Classes": []
+    };
+
+    mapCSVToSubjectWithClassesObject(data, Dita);
 
     console.log(Dita);
 
