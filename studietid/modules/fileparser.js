@@ -21,13 +21,10 @@ const CSVFileToArrayData = (file) => {
         data.push(newline);
     }
 
-    data.pop();
-    data[0].shift(); 
-
     return data;
 };
 
-const mapCSVToSubjectWithClassesObject = (data, Dita) => {
+const mapCSVToSubjectWithClassesObject = (data, GroupsData) => {
     data.map( (element) => 
     {
         if (element.length == 0)
@@ -37,29 +34,29 @@ const mapCSVToSubjectWithClassesObject = (data, Dita) => {
     
         if (element.length > 1)
         {
-            if (element[1] !== undefined)
+            let code = element[1];
+            if (code !== undefined)
             {
-                Dita.Subject.Code.push(element[1]);
+                GroupsData.Subject.Code.push(code);
+                GroupsData.Codes.add(code);
             }
             if (element[3] !== undefined)
             {
                 const classes = element[3].split(', ');
-                Dita.Subject.ClassesToCodes.push(classes);
+                GroupsData.Subject.ClassesToCodes.push(classes);
     
                 for (const c of classes)
                 {
-                    if (!Dita.Classes.includes(c) && c)
-                    {
-                        Dita.Classes.push(c);
-                    }
+                    GroupsData.Classes.add(c);   
                 }
             }
         }
         else
         {
-            if (element[0] !== undefined)
+            let name = element[0];
+            if (name !== undefined)
             {
-                Dita.Subject.Name.push(element[0].split(' ')[0]);
+                GroupsData.Subject.Name.push(name.split(' ')[0]);
             }
         }
     });
@@ -70,18 +67,43 @@ export function readGroupData(file)
 {
     let data = CSVFileToArrayData(file);
 
-    let Dita = {
+    data.pop();
+    data[0].shift(); 
+
+    let GroupsData = {
         "Subject": {
             "Code": [], 
             "Name": [],
             "ClassesToCodes": []
         },
-        "Classes": []
+        "Classes": new Set(),
+        "Codes": new Set()
     };
 
-    mapCSVToSubjectWithClassesObject(data, Dita);
+    mapCSVToSubjectWithClassesObject(data, GroupsData);
 
-    console.log(Dita);
+    return GroupsData;
+}
 
-    return Dita;
+export function readUserData(file)
+{
+    let data = CSVFileToArrayData(file);
+    data.shift();
+
+    let Users = {
+        "Email": [],
+        "FirstName": [],
+        "LastName": [],
+        "ImageCode": []
+    };
+
+    data.map( (element) => 
+    {
+        Users.FirstName.push(element[0]);
+        Users.LastName.push(element[1]);
+        Users.Email.push(element[2]);
+        Users.ImageCode.push(element[3]);
+    });
+
+    return Users;
 }

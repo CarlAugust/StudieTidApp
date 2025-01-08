@@ -193,4 +193,5 @@ app.listen(3000, () => {
 });
 
 fileparser.readGroupData("grupper");
+fileparser.readUserData("elevdata");
 
