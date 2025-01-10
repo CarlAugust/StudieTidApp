@@ -57,6 +57,7 @@ const mapCSVToSubjectWithClassesObject = (data, GroupsData) => {
             if (name !== undefined)
             {
                 GroupsData.Subject.Name.push(name.split(' ')[0]);
+                GroupsData.Names.add(name.split(' ')[0]);
             }
         }
     });
@@ -77,7 +78,8 @@ export function readGroupData(file)
             "ClassesToCodes": []
         },
         "Classes": new Set(),
-        "Codes": new Set()
+        "Codes": new Set(),
+        "Names": new Set()
     };
 
     mapCSVToSubjectWithClassesObject(data, GroupsData);

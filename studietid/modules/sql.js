@@ -1,6 +1,8 @@
 // Porpuse: This file contains all the functions that interact with the database
 
 import Database from 'better-sqlite3';
+import * as fileparser from './fileparser.js';
+import e from 'express';
 const db = new Database('database.db', { verbose: console.log });
 
 
@@ -63,17 +65,34 @@ export function addRoom(name)
     return rows[0];
 }
 
-export function addSubject(name)
+export function addSubject(name, code)
 {
-    let sql = db.prepare(`INSERT INTO subject (name) VALUES (?)`);
-    const info = sql.run(name);
+    let existingItem = db.prepare(`SELECT * FROM subject WHERE name = ?`).get(name);
 
-    sql = db.prepare(`SELECT * FROM subject WHERE id = ?`);
+    if (existingItem)
+    {
+        return existingItem.id;
+    }
+    else
+    {
+        const result = db.prepare(`INSERT INTO subject (name, code) VALUES (?, ?)`).run(name, code);
+        return result.lastInsertRowid;
+    }
+}
 
-    let rows = sql.all(info.lastInsertRowid);
-    console.log("Rowslength:" + rows.length);
+function addClass(name)
+{
+    const existingItem = db.prepare(`SELECT * FROM class WHERE name = ?`).get(name);
 
-    return rows[0];
+    if (existingItem)
+    {
+        return existingItem.id;
+    }
+    else
+    {
+        const result = db.prepare(`INSERT INTO class (name) VALUES (?)`).run(name);
+        return result.lastInsertRowid;
+    }
 }
 
 // Here are all the delete related functions
@@ -204,4 +223,27 @@ export function denyActivity(id)
     let sql = db.prepare(`UPDATE activity SET idStatus = 3 WHERE id = ?`);
 
     sql.run(id);
+}
+
+// file adding functions
+//------------------------------------------------//
+
+export function updateSubjectClassRelations()
+{
+    let data = fileparser.readGroupData('grupper');
+
+    for (let i = 0; i < data.Subject.Name.length; i++)
+    {   
+
+        let subjectId = addSubject(data.Subject.Name[i], data.Subject.Code[i]);
+        let classes = data.Subject.ClassesToCodes[i];
+
+        for (const c of classes)
+        {
+            let classId = addClass(c);
+            let sql = db.prepare(`INSERT INTO subject_class (idSubject, idClass) VALUES (?, ?)`);
+
+            sql.run(subjectId, classId);
+        }
+    }
 }
