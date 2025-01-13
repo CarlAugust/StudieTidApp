@@ -2,7 +2,6 @@
 
 import Database from 'better-sqlite3';
 import * as fileparser from './fileparser.js';
-import e from 'express';
 const db = new Database('database.db', { verbose: console.log });
 
 
@@ -91,6 +90,21 @@ function addClass(name)
     else
     {
         const result = db.prepare(`INSERT INTO class (name) VALUES (?)`).run(name);
+        return result.lastInsertRowid;
+    }
+}
+
+function addSubjectClass(subjectId, classId)
+{
+    const existingItem = db.prepare(`SELECT * FROM subject_class WHERE idSubject = ? AND idClass = ?`).get(subjectId, classId);
+
+    if (existingItem)
+    {
+        return existingItem.id;
+    }
+    else
+    {
+        const result = db.prepare(`INSERT INTO subject_class (idSubject, idClass) VALUES (?, ?)`).run(subjectId, classId);
         return result.lastInsertRowid;
     }
 }
@@ -241,9 +255,7 @@ export function updateSubjectClassRelations()
         for (const c of classes)
         {
             let classId = addClass(c);
-            let sql = db.prepare(`INSERT INTO subject_class (idSubject, idClass) VALUES (?, ?)`);
-
-            sql.run(subjectId, classId);
+            addSubjectClass(subjectId, classId);
         }
     }
 }
