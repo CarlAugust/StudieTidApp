@@ -5,6 +5,12 @@
             "driver": "SQLite",
             "name": "database",
             "database": "${workspaceFolder:StudieTidApp}/studietid/database.db"
+        },
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "new db",
+            "database": "${workspaceFolder:StudieTid}/database/database.db"
         }
     ]
 }
