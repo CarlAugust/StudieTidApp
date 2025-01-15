@@ -2,8 +2,15 @@
 
 import Database from 'better-sqlite3';
 import * as fileparser from './fileparser.js';
-const db = new Database('database.db', { verbose: console.log });
+import fs from 'fs';
+const db = new Database('database/database.db');
 
+
+export function initializeDatabase()
+{   
+    const sql = fs.readFileSync('database/initdb.sql').toString();
+    db.exec(sql);
+}
 
 // Here are all the add related functions
 //------------------------------------------------//
