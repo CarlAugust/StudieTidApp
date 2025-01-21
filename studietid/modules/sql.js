@@ -266,3 +266,20 @@ export function updateSubjectClassRelations()
         }
     }
 }
+
+
+// Function does not work, simply making the framework
+export function updateUsers()
+{
+    // Forgot file name
+    let data = fileparser.readUserData('bruker');
+
+    for (let i = 0; i < data.Email.length; i++)
+    {
+        // Uses addClass cause it assumes that the users class isnt always in the db, however this is unrealistic
+        let classId = addClass(data.klasse[i]);
+
+        // Email does not come with domain in csv file
+        addUser(data.FirstName[i], data.LastName[i], data.Email + "@iskule.no", "Passord01", 0, 3);
+    }
+}

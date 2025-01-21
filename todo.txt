@@ -1,0 +1,8 @@
+This branches todo list!!!
+
+
+- Make the sql updateUsersfunction work
+- Remove option to sign in (since the user are predefined from a csv file), this will mean we have to use an external api for login, liek google or microsoft
+- take a look at sessions and see if changes impact impact
+- Make a dummy system for login, such that i can use it as a black box
+- 
