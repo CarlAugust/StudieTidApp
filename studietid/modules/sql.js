@@ -10,12 +10,24 @@ export function initializeDatabase()
 {   
     const sql = fs.readFileSync('database/initdb.sql').toString();
     db.exec(sql);
+
+    // Add roles
+
+    let roles = ['Administrator', 'Lærer', 'student'];
+
+    for (const role of roles)
+    {
+        // Try catch to avoid duplicate entries with roles unique constraint
+        // Probobly bad solution might cahnge later
+        try { db.prepare(`INSERT INTO role (name) VALUES (?)`).run(role); }
+        catch (e) { }
+    }
 }
 
 // Here are all the add related functions
 //------------------------------------------------//
 
-export function addUser(firstName, lastName, email, password, isAdmin, idRole)
+export function addUser(firstName, lastName, email, password, idClass, isAdmin, idRole)
 {
     let re = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
@@ -33,9 +45,9 @@ export function addUser(firstName, lastName, email, password, isAdmin, idRole)
         return "InUse";
     }
 
-    sql = db.prepare(`INSERT INTO user (firstName, lastName, email, password, idRole, isAdmin) VALUES (?, ?, ?, ?, ?, ?)`);
-         
-    sql.run(firstName, lastName, email, password, idRole, isAdmin);
+    sql = db.prepare(`INSERT INTO user (firstName, lastName, idRole, isAdmin, email, password, idClass) VALUES (?, ?, ?, ?, ?, ?, ?)`);
+
+    sql.run(firstName, lastName, idRole, isAdmin, email, password, idClass);
 
     return "Success";
 };
@@ -272,14 +284,13 @@ export function updateSubjectClassRelations()
 export function updateUsers()
 {
     // Forgot file name
-    let data = fileparser.readUserData('bruker');
+    let data = fileparser.readUserData('elevdata');
 
     for (let i = 0; i < data.Email.length; i++)
     {
         // Uses addClass cause it assumes that the users class isnt always in the db, however this is unrealistic
-        let classId = addClass(data.klasse[i]);
-
+        let classId = addClass(data.Class[i]);
         // Email does not come with domain in csv file
-        addUser(data.FirstName[i], data.LastName[i], data.Email + "@iskule.no", "Passord01", 0, 3);
+        addUser(data.FirstName[i], data.LastName[i], data.Email + "@iskule.no", "Passord01", classId, 0, 3);
     }
 }

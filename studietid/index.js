@@ -91,9 +91,7 @@ app.post('/login', async (req, res) => {
         return;
     }
 
-    let isPassword = bcrypt.compareSync(password, user.password);
-
-    if (isPassword)
+    if (password === user.password)
     {
         req.session.loggedIn = true;
         req.session.userID = user.userID;
@@ -113,45 +111,6 @@ app.post('/login', async (req, res) => {
     else
     {
         res.redirect('/loginpage?error=Invalid');
-    }
-});
-
-app.post('/signin', async (req, res) => {
-
-    const email = req.body.email;
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-
-    let salt = bcrypt.genSaltSync(10);
-    const password = bcrypt.hashSync(req.body.password, salt);
-
-
-    let result = sql.addUser(firstName, lastName, email, password, 0, 3);
-
-    if (result === "Success")
-    {
-        let user = sql.getUser(email);
-
-        req.session.loggedIn = true;
-        req.session.userID = user.userID;
-        req.session.role = user.role;
-
-        req.session.save(() => {
-            if (req.session.role === 1) {
-                return res.redirect('/teacher');
-            } else {   
-                return res.redirect('/student');
-            }
-        });
-
-    }
-    else if (result === "Invalid")
-    {
-        res.redirect('/loginpage');
-    }
-    else
-    {
-        res.redirect('/loginpage');
     }
 });
 
@@ -192,5 +151,6 @@ app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
     sql.initializeDatabase();
     sql.updateSubjectClassRelations();
+    sql.updateUsers();
 });
 
