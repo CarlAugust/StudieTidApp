@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs, { read } from 'fs';
 
 const CSVFileToArrayData = (file) => {
     const lines = fs.readFileSync(`csvfiles/${file}.csv`, `utf-8`).split(`\n`);
@@ -93,6 +93,7 @@ export function readUserData(file)
     data.shift();
 
     let Users = {
+        "Class": [],
         "Email": [],
         "FirstName": [],
         "LastName": [],
@@ -101,10 +102,11 @@ export function readUserData(file)
 
     data.map( (element) => 
     {
-        Users.FirstName.push(element[0]);
-        Users.LastName.push(element[1]);
-        Users.Email.push(element[2]);
-        Users.ImageCode.push(element[3]);
+        Users.Class.push(element[0]);
+        Users.FirstName.push(element[1]);
+        Users.LastName.push(element[2]);
+        Users.Email.push(element[3]);
+        Users.ImageCode.push(element[4]);
     });
 
     return Users;

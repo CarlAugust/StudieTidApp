@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS class (
 
 CREATE TABLE IF NOT EXISTS role (
     id   INTEGER      PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR (20) NOT NULL
+    name VARCHAR (20) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS room (
@@ -67,10 +67,14 @@ CREATE TABLE IF NOT EXISTS user (
     firstName VARCHAR (45)  NOT NULL,
     lastName  VARCHAR (45)  NOT NULL,
     idRole    INTEGER,
-    isAdmin   TINYINT,
+    isAdmin   TINYINT DEFAULT 0,
     email     VARCHAR (100) UNIQUE,
     password  TEXT (255),
-    class     INTEGER       REFERENCES class (id),
+    idClass     INTEGER ,
+    FOREIGN KEY (
+        idClass
+    )      
+    REFERENCES class (id),
     FOREIGN KEY (
         idRole
     )
@@ -78,4 +82,5 @@ CREATE TABLE IF NOT EXISTS user (
 );
 
 COMMIT TRANSACTION;
+
 PRAGMA foreign_keys = on;
