@@ -1,13 +1,13 @@
 import fs, { read } from 'fs';
 
-const CSVFileToArrayData = (file) => {
+const CSVFileToArrayData = (file, seperator) => {
     const lines = fs.readFileSync(`csvfiles/${file}.csv`, `utf-8`).split(`\n`);
 
     let data = [];
 
     for (let line of lines)
     {
-        line = line.split(`;`);
+        line = line.split(seperator);
 
         let newline = [];
 
@@ -66,7 +66,7 @@ const mapCSVToSubjectWithClassesObject = (data, GroupsData) => {
 
 export function readGroupData(file)
 {
-    let data = CSVFileToArrayData(file);
+    let data = CSVFileToArrayData(file, ';');
 
     data.pop();
     data[0].shift(); 
@@ -89,7 +89,7 @@ export function readGroupData(file)
 
 export function readUserData(file)
 {
-    let data = CSVFileToArrayData(file);
+    let data = CSVFileToArrayData(file, ',');
     data.shift();
 
     let Users = {

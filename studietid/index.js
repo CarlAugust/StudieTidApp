@@ -31,8 +31,25 @@ passport.use(new GoogleStrategy({
     callbackURL: "http://localhost:3000/auth/google/callback"
   },
   function(accessToken, refreshToken, profile, cb) {
-    console.log(profile);
-    console.log(cb);
+    if (!(profile.emails && profile.emails.length > 0))
+    {
+        return cb(null, false);
+    }
+
+    const user = sql.getUser(profile.emails[0].value);
+
+    if (user !== undefined)
+    {
+        req.session.loggedIn = true;
+        req.session.userID = user.userID;
+        req.session.role = user.roleID;
+
+        return cb(null, user);
+    }
+    else
+    {
+        return cb(null, false);
+    }
   }
 ));
 
@@ -52,7 +69,7 @@ app.use(express.urlencoded({ extended: true }));
 // Page routes
 
 app.get('/auth/google',
-    passport.authenticate('google', { scope: ['profile'] }));
+    passport.authenticate('google', { scope: ['profile', 'email'] }));
   
 app.get('/auth/google/callback', 
     passport.authenticate('google', { failureRedirect: '/login' }),
