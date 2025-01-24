@@ -85,7 +85,7 @@ export function addRoom(name)
 
 export function addSubject(name, code)
 {
-    let existingItem = db.prepare(`SELECT * FROM subject WHERE name = ?`).get(name);
+    let existingItem = db.prepare(`SELECT * FROM subject WHERE code = ?`).get(code);
 
     if (existingItem)
     {
