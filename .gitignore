@@ -12,3 +12,9 @@ config.js
 # Ignore build outputs
 dist/
 build/
+
+# Ignoring the csvfiles by school request
+csvfiles/
+
+# Ignore the database
+database.db

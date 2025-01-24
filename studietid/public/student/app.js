@@ -5,6 +5,7 @@ const subjectsSet = () => {
         let selector = document.getElementById('subjectSelector');
         subjects.forEach(subject => {
             selector.innerHTML += `<option value="${subject.id}">${subject.name}</option>`;
+            console.log(subject);
         });
     });
 }
@@ -31,18 +32,9 @@ const activitySet = () => {
     });
 }
 
-const users = () => {
-    fetchUsers().then(users => {
-        users.forEach(user => {
-            console.log(user);
-        });
-    });
-}
-
 subjectsSet();
 roomsSet();
 activitySet();
-users();
 
 const params = new URLSearchParams(window.location.search);
 
