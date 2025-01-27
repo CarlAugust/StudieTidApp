@@ -4,7 +4,7 @@
 import * as sql from './modules/sql.js';
 import * as fileparser from './modules/fileparser.js';
 import { checkLoggedIn, checkAdmin, checkTeacher } from './modules/middleware.js';
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from './config.js';
+import passport from './modules/passport.js';
 
 // Node imports
 import express from 'express';
@@ -13,45 +13,14 @@ import { fileURLToPath } from 'url';
 import session from 'express-session';
 import bcrypt from 'bcrypt';
 import { configDotenv } from 'dotenv';
-import GoogleStrategy from 'passport-google-oauth20';
-import passport from 'passport';
 
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
 configDotenv();
 const SECRET = process.env.SECRET;
-
-passport.use(new GoogleStrategy({
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/callback"
-  },
-  function(accessToken, refreshToken, profile, cb) {
-    if (!(profile.emails && profile.emails.length > 0))
-    {
-        return cb(null, false);
-    }
-
-    const user = sql.getUser(profile.emails[0].value);
-
-    if (user !== undefined)
-    {
-        req.session.loggedIn = true;
-        req.session.userID = user.userID;
-        req.session.role = user.roleID;
-
-        return cb(null, user);
-    }
-    else
-    {
-        return cb(null, false);
-    }
-  }
-));
 
 app.use(session({
     secret: SECRET,
