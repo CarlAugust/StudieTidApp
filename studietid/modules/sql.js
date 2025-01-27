@@ -85,7 +85,7 @@ export function addRoom(name)
 
 export function addSubject(name, code)
 {
-    let existingItem = db.prepare(`SELECT * FROM subject WHERE code = ?`).get(code);
+    let existingItem = db.prepare(`SELECT id FROM subject WHERE code = ?`).get(code);
 
     if (existingItem)
     {
@@ -100,7 +100,7 @@ export function addSubject(name, code)
 
 function addClass(name)
 {
-    const existingItem = db.prepare(`SELECT * FROM class WHERE name = ?`).get(name);
+    const existingItem = db.prepare(`SELECT id FROM class WHERE name = ?`).get(name);
 
     if (existingItem)
     {
@@ -115,9 +115,9 @@ function addClass(name)
 
 function addSubjectClass(subjectId, classId)
 {
-    const existingItem = db.prepare(`SELECT * FROM subject_class WHERE idSubject = ? AND idClass = ?`).get(subjectId, classId);
+    const existingItem = db.prepare(`SELECT idSubject FROM subject_class WHERE idSubject = ? AND idClass = ?`).all(subjectId, classId);
 
-    if (existingItem)
+    if (existingItem.length > 0)
     {
         return existingItem.id;
     }
