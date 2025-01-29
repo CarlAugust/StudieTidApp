@@ -1,19 +1,19 @@
 export function checkLoggedIn(req, res, next)
 {
-    if (req.session && req.session.loggedIn)
+    if (req.session.passport)
     {
         next();
     }
     else
     {
-        req.session.loggedIn = false;
         return res.redirect('/loginpage/');
     }
 }
 
 export function checkTeacher(req, res, next)
 {
-    if (req.session.role === 2 || req.session.role === 1)	// Teacher or Admin
+    const user = req.session.passport.user;
+    if (user.role === 2 || user.role === 1)	// Teacher or Admin
     {
         next();
     }
@@ -24,7 +24,8 @@ export function checkTeacher(req, res, next)
 }
 export function checkAdmin(req, res, next)
 {
-    if (req.session.role === 1)
+    const user = req.session.passport.user;
+    if (user.role === 1)
     {
         next();
     }

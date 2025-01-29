@@ -39,9 +39,9 @@ app.use(express.urlencoded({ extended: true }));
 // Page routes
 
 app.get("/", checkLoggedIn, (req, res) => {
-    if (req.session.role === 1) {
+    if (req.session.passport.user.roleID === 1) {
         res.redirect('/admin');
-    } else if (req.session.role === 2) {
+    } else if (req.session.passport.user.roleID === 2) {
         res.redirect('/teacher');
     } else {
         res.redirect('/student');
@@ -84,45 +84,7 @@ app.get('/getActivities', checkLoggedIn, checkTeacher, (req, res) => {
 })
 
 app.get('/getActivity', checkLoggedIn, (req, res) => {
-    res.send(sql.getActivity(req.session.userID));
-});
-
-// Login routes
-
-app.post('/login', async (req, res) => {
-
-    const email = req.body.email;
-    const password = req.body.password;
-
-    let user = sql.getUser(email);
-
-    if (user === undefined)
-    {
-        res.redirect('/loginpage');
-        return;
-    }
-
-    if (password === user.password)
-    {
-        req.session.loggedIn = true;
-        req.session.userID = user.userID;
-        req.session.role = user.roleID;
-
-        req.session.save(() => {
-            if (req.session.role === 1) {
-                return res.redirect('/admin');
-            }
-            else if (req.session.role === 2) {
-                return res.redirect('/teacher');
-            } else {   
-                return res.redirect('/student');
-            }
-        });
-    }
-    else
-    {
-        res.redirect('/loginpage?error=Invalid');
-    }
+    res.send(sql.getActivity(req.session.passport.user.userID));
 });
 
 app.post("/logout", (req, res) => {
@@ -135,13 +97,14 @@ app.post("/logout", (req, res) => {
 app.post('/addActivity', checkLoggedIn, (req, res) => {
     const room = req.body.room;
     const subject = req.body.subject;
+    
 
     if (room === "" || subject === "")
     {
         res.redirect('/student');
         return;
     }
-    sql.addActivity(req.session.userID, subject, room);
+    sql.addActivity(req.session.passport.user.userId, subject, room);
     res.redirect('/student');
 })
 
