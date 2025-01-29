@@ -1,10 +1,13 @@
+
+
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
 import MicrosoftStrategy from 'passport-microsoft';
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '../config.js';
 import * as sql from './sql.js';
 
-function loginProfile(profile, cb) {
+function checkIfUserIsValid(accessToken, refreshToken, profile, cb) 
+{
     if (!(profile.emails && profile.emails.length > 0))
         {
             return cb(null, false);
@@ -14,11 +17,6 @@ function loginProfile(profile, cb) {
     
         if (user !== undefined)
         {
-            console.log("User logged in: " + user.email);
-            req.session.loggedIn = true;
-            req.session.userID = user.userID;
-            req.session.role = user.roleID;
-    
             return cb(null, user);
         }
         else
@@ -28,13 +26,22 @@ function loginProfile(profile, cb) {
         }
 }
 
+
+passport.serializeUser(function(user, done) {
+    done(null, user);
+  });
+  
+  passport.deserializeUser(function(user, done) {
+    done(null, user);
+  });
+
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
     callbackURL: "http://localhost:3000/auth/google/callback"
   },
   function(accessToken, refreshToken, profile, cb) {
-    return loginProfile(profile, cb);
+    return checkIfUserIsValid(accessToken, refreshToken, profile, cb);
   }
 ));
 
@@ -67,7 +74,7 @@ passport.use(new GoogleStrategy({
 //     apiEntryPoint: 'https://graph.microsoft.com',
 //   },
 //   function(accessToken, refreshToken, profile, done) {
-//     return loginProfile();
+//     return checkIfUserIsValid(accessToken, refreshToken, profile, done);
 //   }
 // ));
 

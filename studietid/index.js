@@ -4,7 +4,6 @@
 import * as sql from './modules/sql.js';
 import * as fileparser from './modules/fileparser.js';
 import { checkLoggedIn, checkAdmin, checkTeacher } from './modules/middleware.js';
-import passport from './modules/passport.js';
 
 // Node imports
 import express from 'express';
@@ -13,6 +12,8 @@ import { fileURLToPath } from 'url';
 import session from 'express-session';
 import bcrypt from 'bcrypt';
 import { configDotenv } from 'dotenv';
+
+import passport from './modules/passport.js';
 
 const app = express();
 
@@ -37,17 +38,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Page routes
 
-app.get('/auth/google',
-    passport.authenticate('google', { scope: ['profile', 'email'] }));
-  
-app.get('/auth/google/callback', 
-    passport.authenticate('google', { failureRedirect: '/login' }),
-    function(req, res) {
-      // Successful authentication, redirect home.
-      res.redirect('/');
-    }
-);
-
 app.get("/", checkLoggedIn, (req, res) => {
     if (req.session.role === 1) {
         res.redirect('/admin');
@@ -57,6 +47,16 @@ app.get("/", checkLoggedIn, (req, res) => {
         res.redirect('/student');
     }
 });
+
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] }));
+  
+app.get('/auth/google/callback', 
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    function(req, res) {
+      res.redirect('/');
+    }
+);
 
 app.get('/student/*', checkLoggedIn, (req, res) => {
     console.log("user on student page");
