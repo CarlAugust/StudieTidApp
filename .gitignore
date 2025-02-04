@@ -9,6 +9,7 @@ logs/
 .env
 config.js
 
+
 # Ignore build outputs
 dist/
 build/
