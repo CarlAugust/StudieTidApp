@@ -161,7 +161,7 @@ export function deleteRoom(name)
 export function getUser(email)
 {
     let sql = db.prepare(
-        `SELECT user.id as userID, user.firstName, user.lastName, role.id as roleID, role.name as role, user.email, user.password as password, user.isAdmin as isAdmin
+        `SELECT user.id as userID, user.firstName, user.lastName, role.id as roleID, role.name as role, user.email
         FROM user
         inner join role on user.idRole = role.id
         WHERE user.email = ?`);
