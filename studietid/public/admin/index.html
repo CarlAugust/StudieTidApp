@@ -7,22 +7,18 @@
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
-    <header>
-        <h1>Admin Panel</h1>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="#dashboard">Dashboard</a></li>
-            <li><a href="#users">Users</a></li>
-            <li><a href="#settings">Settings</a></li>
-        </ul>
-    </nav>
-    <main>
-        <section id="dashboard">
-            <h2>Dashboard</h2>
+    <div class="flex border-b-2 border-solid border-black py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
+        <a href="#dashboard" class="">Dashboard</a>
+        <a href="#users"class="ml-2">Users</a>
+        <a href="#settings" class="ml-2">Settings</a>
+    </div>
+
+    <div class="border-solid border-2 border-black p-4 w-2/3 m-auto mt-20 mb-40 content-center">
+        <div id="dashboard">
+            <h1>Dashboard</h1>
             <p>Welcome to the admin dashboard.</p>
-        </section>
-        <section id="users">
+        </div>
+        <div id="users">
             <h2>Users</h2>
             <p>Manage users here.</p>
             <table id="usersTable">
@@ -32,13 +28,13 @@
                     <th>Role</th>
                 </tr>
             </table>
-        </section>
-        <section id="settings">
+        </div>
+        <div id="settings">
             <h2>Settings</h2>
             <p>Adjust your settings here.</p>
-        </section>
-    </main>
-    <footer>
+        </div>
+    </div>
+    <footer class="footer bg-neutral text-neutral-content p-10 mt-20 border-black border-solid border-t-2">
         <p>&copy; 2023 Your Company</p>
     </footer>
     <script type="module" src="script.js"></script>

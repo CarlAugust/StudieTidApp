@@ -34,7 +34,6 @@ const activitySet = () => {
 
 subjectsSet();
 roomsSet();
-activitySet();
 
 const params = new URLSearchParams(window.location.search);
 

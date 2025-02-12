@@ -20,7 +20,7 @@
     "passport-microsoft": "^2.1.0",
     "path": "^0.12.7",
     "sqlite3": "^5.1.7",
-    "tailwindcss": "^4.0.5"
+    "tailwindcss": "^4.0.6"
   },
   "type": "module"
 }
