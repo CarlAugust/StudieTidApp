@@ -244,6 +244,12 @@ export function getActivity(id)
     return rows;
 }
 
+export function getImageId(id)
+{
+    let sql = db.prepare(`SELECT imageId FROM user WHERE id = ?`).get(id);
+    return sql;
+}
+
 export function approveActivity(id)
 {
     let sql = db.prepare(`UPDATE activity SET idStatus = 2 WHERE id = ?`);

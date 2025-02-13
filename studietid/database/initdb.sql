@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS user (
     idRole    INTEGER,
     isAdmin   TINYINT DEFAULT 0,
     email     VARCHAR (100) UNIQUE,
+    imageId   VARCHAR (20) UNIQUE,
     password  TEXT (255),
     idClass     INTEGER ,
     FOREIGN KEY (

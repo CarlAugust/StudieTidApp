@@ -104,7 +104,7 @@ app.post('/addActivity', checkLoggedIn, (req, res) => {
         res.redirect('/student');
         return;
     }
-    sql.addActivity(req.session.passport.user.userId, subject, room);
+    sql.addActivity(req.session.passport.user.userID, subject, room);
     res.redirect('/student');
 })
 
@@ -119,6 +119,14 @@ app.get('/denyActivity', checkLoggedIn, checkTeacher, (req, res) => {
     sql.denyActivity(req.query.id);
     res.send("Success");
 }); 
+
+
+// Resource routes
+
+app.get('/fetchImage', checkLoggedIn, (req, res) => {
+    const imageId = sql.getImageId(req.session.passport.user.userID).imageId;
+    res.sendFile(path.join(__dirname, `/userimages/${imageId}.jpg`));
+})
 
 app.use(express.static(staticPath));
 app.listen(3000, () => {
