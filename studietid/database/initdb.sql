@@ -1,33 +1,6 @@
 PRAGMA foreign_keys = off;
 BEGIN TRANSACTION;
 
-CREATE TABLE IF NOT EXISTS activity (
-    id        INTEGER  PRIMARY KEY AUTOINCREMENT,
-    idUser    INTEGER,
-    startTime DATETIME NOT NULL,
-    idSubject INTEGER,
-    idRoom    INTEGER,
-    idStatus  TINYINT,
-    duration  TINYINT,
-    idTeacher INT      REFERENCES user (id),
-    FOREIGN KEY (
-        idUser
-    )
-    REFERENCES user (id),
-    FOREIGN KEY (
-        idSubject
-    )
-    REFERENCES subject (id),
-    FOREIGN KEY (
-        idRoom
-    )
-    REFERENCES room (id),
-    FOREIGN KEY (
-        idStatus
-    )
-    REFERENCES status (id) 
-);
-
 CREATE TABLE IF NOT EXISTS class (
     id   INTEGER      PRIMARY KEY AUTOINCREMENT
                       UNIQUE
@@ -80,6 +53,43 @@ CREATE TABLE IF NOT EXISTS user (
         idRole
     )
     REFERENCES role (id) 
+);
+
+CREATE TABLE IF NOT EXISTS date (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date DATETIME NOT NULL
+)
+
+CREATE TABLE IF NOT EXISTS activity (
+    id        INTEGER  PRIMARY KEY AUTOINCREMENT,
+    idUser    INTEGER,
+    startTime DATETIME NOT NULL,
+    idSubject INTEGER,
+    idRoom    INTEGER,
+    idStatus  TINYINT,
+    duration  TINYINT,
+    idDate INTEGER,
+    idTeacher INT      REFERENCES user (id),
+    FOREIGN KEY (
+        idUser
+    )
+    REFERENCES user (id),
+    FOREIGN KEY (
+        idSubject
+    )
+    REFERENCES subject (id),
+    FOREIGN KEY (
+        idRoom
+    )
+    REFERENCES room (id),
+    FOREIGN KEY (
+        idStatus
+    )
+    REFERENCES status (id),
+    FOREIGN KEY (
+        idDate
+    )
+    REFERENCES date (id) 
 );
 
 COMMIT TRANSACTION;
