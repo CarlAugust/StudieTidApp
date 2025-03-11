@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
     <link rel="stylesheet" href="../styles.css">
+
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .calendar { display: inline-block; text-align: center; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+        th { background: #f4f4f4; }
+        .nav-buttons { margin: 10px; }
+    </style>
 </head>
 <body>
     <div class="flex border-b-2 border-solid border-black py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
@@ -34,6 +43,75 @@
             <p>Adjust your settings here.</p>
         </div>
     </div>
+    <body>
+        <h2 id="currentMonthYear" class="text-2xl font-semibold mb-4"></h2>
+        <div class="space-x-4 mb-4">
+            <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" onclick="prevMonth()">&#9665; Prev</button>
+            <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" onclick="nextMonth()">Next &#9655;</button>
+        </div>
+        <div class="calendar bg-white p-4 rounded-lg shadow-lg">
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="p-2">Sun</th><th class="p-2">Mon</th><th class="p-2">Tue</th><th class="p-2">Wed</th><th class="p-2">Thu</th><th class="p-2">Fri</th><th class="p-2">Sat</th>
+                    </tr>
+                </thead>
+                <tbody id="calendarBody"></tbody>
+            </table>
+        </div>
+        <script>
+            let currentYear = new Date().getFullYear();
+            let currentMonth = new Date().getMonth();
+            const maxYear = 2028;
+    
+            function generateCalendar(year, month) {
+                document.getElementById("currentMonthYear").innerText = new Date(year, month).toLocaleString('default', { month: 'long', year: 'numeric' });
+                const firstDay = new Date(year, month, 1).getDay();
+                const lastDate = new Date(year, month + 1, 0).getDate();
+                let tableBody = "";
+                let date = 1;
+                for (let i = 0; i < 6; i++) {
+                    let row = "<tr>";
+                    for (let j = 0; j < 7; j++) {
+                        if (i === 0 && j < firstDay) {
+                            row += "<td class='p-2'></td>";
+                        } else if (date > lastDate) {
+                            break;
+                        } else {
+                            row += `<td class='p-2 border text-center text-lg font-medium hover:bg-blue-500 text hover:text-white'>${date}</td>`;
+                            date++;
+                        }
+                    }
+                    row += "</tr>";
+                    tableBody += row;
+                    if (date > lastDate) break;
+                }
+                document.getElementById("calendarBody").innerHTML = tableBody;
+            }
+    
+            function prevMonth() {
+                if (currentYear === 2023 && currentMonth === 0) return;
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                generateCalendar(currentYear, currentMonth);
+            }
+    
+            function nextMonth() {
+                if (currentYear === maxYear && currentMonth === 11) return;
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                generateCalendar(currentYear, currentMonth);
+            }
+    
+            generateCalendar(currentYear, currentMonth);
+        </script>
+
     <footer class="footer bg-neutral text-neutral-content p-10 mt-20 border-black border-solid border-t-2">
         <p>&copy; 2023 Your Company</p>
     </footer>
